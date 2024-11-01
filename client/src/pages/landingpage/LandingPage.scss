@@ -1,0 +1,114 @@
+.landingpage {
+
+
+
+  .main-box {
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-color: #125252;
+    position: relative;
+    color: #000;
+    text-align: center;
+    min-height: 970px;
+    background: url("http://localhost:3000/api/images/background.png");
+    background-size: cover;
+
+
+
+    .box {
+      width: 100%;
+      font-size: 16px;
+      padding-top: 250px;
+      .text {
+        background-color: #fff;
+        padding: 15px;
+        display: inline-grid;
+      }
+    }
+  }
+
+
+.color1 {
+    color: #d54b63;
+}
+.color2 {
+    color: #aa4575;
+}
+
+
+
+
+
+
+
+
+  &__banner {
+    background: url("http://localhost:3000/api/images/background.png");
+    background-size: cover;
+    height: 970px;
+    width: 100%;
+    position: relative;
+
+    &__text-container {
+
+      width: 50%;
+      position: absolute;
+      top: 30%;
+      left: 30%;
+      background-color: #fff;
+      opacity: 0.5;
+
+      &__text {
+        font-size: 4vw;
+        color: #000;
+        text-align: center;
+      }
+
+    }
+
+  }
+
+
+  header {
+    background: #007bff;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+  }
+  .container {
+    padding-top: 60px;
+    width: 80%;
+    overflow: hidden;
+  }
+  section {
+    margin: 5px 0;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+  }
+  h1, h2, h3 {
+    color: #333;
+  }
+  .features {
+    display: flex;
+    justify-content: space-around;
+  }
+  .feature {
+    flex: 1;
+    margin: 10px;
+    text-align: center;
+  }
+
+  .cta {
+    text-align: center;
+    margin: 20px 0;
+  }
+  .cta button {
+    padding: 10px 20px;
+    margin-left: 3px;
+  }
+  .cta button:hover {
+    background: #218838;
+  }
+}
+

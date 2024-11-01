@@ -1,0 +1,54 @@
+.dw-header {
+    background-color: #fff;
+    border-bottom: 1px solid #dadada;
+    padding: 6px;
+    height: 55px;
+    z-index: 11;
+    position: fixed;
+    width: 100%;
+
+    .navbar-brand {
+        font-weight: bold;
+        img {
+            height: 26px;
+        }
+    }
+
+    nav {
+        padding: 0;
+    }
+
+    .dw-projects-select {
+        display: flex;
+        width: 120px;
+        padding: 0;
+    }
+
+    .dw-settings {
+        display: block;
+
+        button {
+            color: #454c51;
+        }
+
+        .dropdown-menu {
+            right: 0;
+            left: auto;
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+    }
+
+    .dw-settings-button {
+        font-size: 25px;
+        position: relative;
+        top: -4px;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+
+

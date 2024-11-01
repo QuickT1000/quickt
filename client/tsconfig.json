@@ -1,0 +1,14 @@
+{
+  "exclude":[
+    "./node_modules",
+    "client/dist",
+    "react/require-default-props"
+  ],
+  "compilerOptions": {
+    "jsx": "react",
+    "paths": {
+      "@components/*": ["./src/components/*"],
+      "@services/*": ["./src/services/*"],
+    },
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "@server": "./server",
+  "@libraries": "./libraries",
+  "@controller": "./server/controller",
+  "@usecases": "./server/usecases",
+  "@services": "./server/services",
+  "@adapter": "./server/adapter",
+  "@repository": "./server/repository",
+  "@config": "./server/config"
+}

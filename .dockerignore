@@ -1,0 +1,9 @@
+node_modules
+client/node_modules
+server/node_modules
+libraries/node_modules
+dist
+client/dist
+server/dist
+libraries/dist
+.env

@@ -1,0 +1,45 @@
+.get-started-page {
+
+  header {
+    background: #007bff;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+  }
+  .container {
+    padding-top: 60px;
+    width: 80%;
+    overflow: hidden;
+  }
+  section {
+    margin: 5px 0;
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+  }
+  h1, h2, h3 {
+    color: #333;
+  }
+  .features {
+    display: flex;
+    justify-content: space-around;
+  }
+  .feature {
+    flex: 1;
+    margin: 10px;
+    text-align: center;
+  }
+
+  .cta {
+    text-align: center;
+    margin: 20px 0;
+  }
+  .cta button {
+    padding: 10px 20px;
+    margin-left: 3px;
+  }
+  .cta button:hover {
+    background: #218838;
+  }
+}
+
