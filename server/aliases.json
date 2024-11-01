@@ -5,6 +5,5 @@
   "@usecases": "./server/usecases",
   "@config": "./server/config",
   "@server": "./server",
-  "@libraries": "./libraries",
   "@services": "./server/services"
 }
