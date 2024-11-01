@@ -25,7 +25,7 @@ export const LandingPage = () => {
                     <div className="box">
                         <span className="text">
                         <h1>
-                            Web based <strong>quick</strong> <strong>T</strong>ranslations
+                            <strong>Quick</strong> <strong>T</strong>ranslations
                         </h1>
                         <p>
                             Free, Open Source, Easy to Use, Fully Customizable, <strong className={'color2'}>AI Support</strong>, Quick and Easy Deployment.
