@@ -1,5 +1,5 @@
-import { DatabaseOptions } from '@libraries/persistence';
-import { getRequiredEnv } from '@libraries/runtime';
+import { DatabaseOptions } from '../../libraries/persistence';
+import { getRequiredEnv } from '../../libraries/runtime';
 
 export const postgresConfig: DatabaseOptions = {
     database: getRequiredEnv('DW_DATABASE_DB'),

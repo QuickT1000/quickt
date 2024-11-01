@@ -1,10 +1,10 @@
 {
+  "@adapter": "./adapter",
+  "@controller": "./server/controller",
+  "@repository": "./server/repository",
+  "@usecases": "./server/usecases",
+  "@config": "./server/config",
   "@server": "./server",
   "@libraries": "./libraries",
-  "@controller": "./server/controller",
-  "@usecases": "./server/usecases",
-  "@services": "./server/services",
-  "@adapter": "./server/adapter",
-  "@repository": "./server/repository",
-  "@config": "./server/config"
+  "@services": "./server/services"
 }

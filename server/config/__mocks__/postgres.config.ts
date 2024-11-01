@@ -1,6 +1,4 @@
-import { DatabaseOptions } from '@libraries';
-
-export const postgresConfig: DatabaseOptions = {
+export const postgresConfig: any = {
   database: 'postgres',
   port: 5432,
   user: 'test',

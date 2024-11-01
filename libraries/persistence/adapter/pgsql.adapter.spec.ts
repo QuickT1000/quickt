@@ -1,5 +1,5 @@
 import { PgsqlAdapter } from './pgsql.adapter';
-import { Logger } from '@libraries/logger';
+import { Logger } from '../../logger';
 
 jest.mock('pg');
 jest.mock('../../../../libraries/logger');

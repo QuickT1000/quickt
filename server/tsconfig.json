@@ -19,9 +19,8 @@
       "@repository/*": ["./repository/*"],
       "@usecases/*": ["./usecases/*"],
       "@config/*": ["./config/*"],
-      "@logger/*": ["./logger/*"],
-      "@libraries/*": ["../libraries/*"],
       "@server/*": ["../server/*"],
+      "@libraries/*": ["../libraries/*"],
       "@services/*": ["../services/*"],
     }
   },
