@@ -15,6 +15,7 @@
   "author": "Bhargav Bachina",
   "license": "ISC",
   "dependencies": {
+    "@types/jest": "^29.5.14",
     "@types/module-alias": "^2.0.4",
     "express": "^4.17.1",
     "module-alias": "2.2.3",
