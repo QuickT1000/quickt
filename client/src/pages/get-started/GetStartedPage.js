@@ -35,6 +35,7 @@ Desktop:~/projects/quickt$ docker-compose up
     return (
         <div className={'get-started-page'}>
 
+
             <DwHeader navigation={getMainNavigation()}>
                 <div id="logo"><img src="/api/images/logo.png" alt="quickT"/>quickT</div>
             </DwHeader>
