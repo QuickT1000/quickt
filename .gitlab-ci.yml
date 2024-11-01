@@ -1,0 +1,54 @@
+image: gitlab/dind
+services:
+  - docker:dind
+
+stages:
+  - build
+  - release
+  - prod
+  - cleanup
+
+variables:
+  DOCKER_REPOSITORY: $CI_REGISTRY_IMAGE:latest
+  DOCKER_CONTAINER_NAME: quickt
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+build:
+  stage: build
+  tags:
+    - tools
+  script:
+    - docker build -t $CONTAINER_TEST_IMAGE -f Dockerfile .
+    - docker push $CONTAINER_TEST_IMAGE
+
+release-image:
+  tags:
+    - tools
+  stage: release
+  script:
+    - docker pull $CONTAINER_TEST_IMAGE
+    - docker tag $CONTAINER_TEST_IMAGE $CONTAINER_RELEASE_IMAGE
+    - docker push $CONTAINER_RELEASE_IMAGE
+
+prod:
+  tags:
+    - tools
+  stage: prod
+  script:
+    - docker-compose up --force-recreate -d
+  only:
+    - main
+  environment: prod
+
+
+cleanup:
+  tags:
+    - tools
+  stage: cleanup
+  script:
+    - docker rmi $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - docker rmi $(docker images -f "dangling=true" -q) --force
