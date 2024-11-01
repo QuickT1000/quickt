@@ -33,7 +33,7 @@ services:
     env_file:
       - ./.env
     restart: unless-stopped
-    command: sh -c "cd server && npm run start:dev"
+    command: sh -c "cd server && npm run start"
   dw-database:
     image: "postgres:11"
     labels:

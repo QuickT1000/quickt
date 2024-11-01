@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "ts-node ../../server.ts",
-    "build:prod": "rm -rf ./dist && tsc --build src/tsconfig.prod.json",
+    "build:prod": "rm -rf ./dist && tsc --build ./tsconfig.json",
     "start:dev": "./node_modules/nodemon/bin/nodemon.js --project ../tsconfig.json ",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tslint": "tslint --project ./tsconfig.json --config tslint.json",
