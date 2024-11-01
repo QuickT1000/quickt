@@ -21,7 +21,8 @@
     "react-markdown": "^9.0.1",
     "react-router-dom": "^6.26.0",
     "react-scripts": "5.0.1",
-    "react-select": "^5.8.0"
+    "react-select": "^5.8.0",
+    "react-syntax-highlighter": "^15.6.1"
   },
   "scripts": {
     "start": "npm run load-env && GENERATE_SOURCEMAP=false craco start --project ../tsconfig.json",

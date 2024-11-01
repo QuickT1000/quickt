@@ -15,19 +15,10 @@ export const LandingPage = () => {
 
     return (
         <div className={'landingpage'}>
+
             <DwHeader navigation={getMainNavigation()}>
                 <div id="logo"><img src="/api/images/logo.png" alt="quickT"/>quickT</div>
             </DwHeader>
-
-
-            {/*<div className={'landingpage__banner'}>
-                <div className={'landingpage__banner__text-container'}>
-                    <div className={'landingpage__banner__text-container__text'}>
-                        Quick Translations
-                    </div>
-                </div>
-            </div>*/}
-
 
             <section className="main-box">
                 <div className="row">
