@@ -6,7 +6,7 @@ RUN cd client && npm install && npm run build
 FROM node:18.20.1-alpine AS server-build
 WORKDIR /app
 COPY server/ ./server/
-RUN cd server && npm install && npm run build
+RUN cd server && npm install && npm run build:prod
 
 FROM node:18.20.1-alpine
 WORKDIR /app
