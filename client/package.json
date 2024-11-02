@@ -25,10 +25,10 @@
     "react-syntax-highlighter": "^15.6.1"
   },
   "scripts": {
-    "start": "npm run load-env && GENERATE_SOURCEMAP=false npx craco start --project ../tsconfig.json",
-    "build": "npm run load-env && npx craco build",
-    "test": "npx craco test",
-    "eject": "npx craco eject",
+    "start": "npm run load-env && GENERATE_SOURCEMAP=false ./node_modules/.bin/craco start --project ../tsconfig.json",
+    "build": "npm run load-env && ./node_modules/.bin/craco build",
+    "test": "./node_modules/.bin/craco test",
+    "eject": "./node_modules/.bin/craco eject",
     "load-env": "env $(cat .env | xargs)"
   },
   "proxy": "http://dw-server:3001",
