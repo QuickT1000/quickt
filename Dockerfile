@@ -3,7 +3,7 @@ FROM node:18.20.1-alpine AS ui-build
 WORKDIR /app/client
 COPY client/package*.json ./
 COPY client/ ./
-RUN npm install && npm run build && ls -la build
+RUN npm install -g craco && npm install && npm run build && ls -la build
 
 # Build für die Server-Anwendung
 FROM node:18.20.1-alpine AS server-build
