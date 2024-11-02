@@ -29,4 +29,4 @@ RUN ls -la
 ENV NODE_ENV=production
 EXPOSE 3001
 
-CMD ["node", "./server/dist/index.js"]
+CMD ["node", "./server/dist/server.js"]
