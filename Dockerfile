@@ -19,9 +19,11 @@ WORKDIR /app
 
 # Kopiere die Client-Build-Artefakte ins finale Image
 COPY --from=ui-build /app/client/build ./client/build
+COPY --from=ui-build /app/client/node_modules ./client/node_modules
 COPY --from=ui-build /app/client/package.json ./client/
 # Kopiere die Server-Build-Artefakte ins finale Image
 COPY --from=server-build /app/server/package.json ./server/
+COPY --from=server-build /app/server/node_modules ./server/node_modules
 COPY --from=server-build /app/server/dist ./server/dist
 
 RUN ls -la
