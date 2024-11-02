@@ -19,6 +19,7 @@ variables:
   DW_DATABASE_PORT: $DW_DATABASE_PORT
 
 before_script:
+  - export
   - echo "$DW_DATABASE_USER"
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
@@ -45,6 +46,7 @@ prod:
     - tools
   script:
     - docker-compose -f docker-compose.prod.yml up --force-recreate -d
+    - docker exec -it quickt_dw-server_1 env
   only:
     - main
   environment:

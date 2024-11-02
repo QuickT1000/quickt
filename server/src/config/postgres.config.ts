@@ -1,6 +1,9 @@
 import { DatabaseOptions } from '@libraries/persistence';
 import { getRequiredEnv } from '@libraries/runtime';
 
+console.log(process.env['DW_DATABASE_DB'], ' <------ process.env[\'DW_DATABASE_DB\'] ------ ');
+
+
 export const postgresConfig: DatabaseOptions = {
     database: getRequiredEnv('DW_DATABASE_DB'),
     port: +getRequiredEnv('DW_DATABASE_PORT'),
