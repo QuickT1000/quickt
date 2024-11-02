@@ -21,6 +21,7 @@ WORKDIR /app
 COPY --from=ui-build /app/client/build ./client/build
 COPY --from=ui-build /app/client/node_modules ./client/node_modules
 COPY --from=ui-build /app/client/package.json ./client/
+COPY --from=ui-build /app/client/craco.config.js ./client/
 # Kopiere die Server-Build-Artefakte ins finale Image
 COPY --from=server-build /app/server/package.json ./server/
 COPY --from=server-build /app/server/node_modules ./server/node_modules
