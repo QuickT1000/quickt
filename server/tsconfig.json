@@ -17,15 +17,15 @@
     ],
     "baseUrl": "./src",
     "paths": {
-      "@interfaces/*": ["./src/interfaces/*"],
-      "@models/*": ["./src/models/*"],
-      "@adapter/*": ["./src/adapter/*"],
-      "@controller/*": ["./src/controller/*"],
-      "@repository/*": ["./src/repository/*"],
-      "@usecases/*": ["./src/usecases/*"],
-      "@config/*": ["./src/config/*"],
-      "@services/*": ["./src/services/*"],
-      "@libraries/*": ["./src/libraries/*"]
+      "@interfaces/*": ["./interfaces/*"],
+      "@models/*": ["./models/*"],
+      "@adapter/*": ["./adapter/*"],
+      "@controller/*": ["./controller/*"],
+      "@repository/*": ["./repository/*"],
+      "@usecases/*": ["./usecases/*"],
+      "@config/*": ["./config/*"],
+      "@services/*": ["./services/*"],
+      "@libraries/*": ["./libraries/*"]
     }
   },
   "include": ["./src/**/*"],

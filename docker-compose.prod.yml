@@ -14,7 +14,7 @@ services:
     volumes:
       - .:/app
     restart: unless-stopped
-    command: sh -c "npm start"
+    command: sh -c "ls -la && npm start"
     ports:
       - "3000:3000"
 
@@ -31,7 +31,7 @@ services:
     volumes:
       - .:/app
     restart: unless-stopped
-    command: sh -c "npm run start"
+    command: sh -c "ls -la && npm start"
 
   dw-database:
     image: "postgres:11"
