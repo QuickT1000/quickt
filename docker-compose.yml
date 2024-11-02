@@ -46,11 +46,6 @@ services:
       POSTGRES_PASSWORD: ${DW_DATABASE_PASSWORD}
       POSTGRES_DB: ${DW_DATABASE_DB}
       PGPORT: 5433
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DW_DATABASE_USER}" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
     ports:
       - "${DW_DATABASE_PORT}:5433"
     volumes:
