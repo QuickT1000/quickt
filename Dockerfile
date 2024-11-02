@@ -19,7 +19,9 @@ WORKDIR /app
 
 # Kopiere die Client-Build-Artefakte ins finale Image
 COPY --from=ui-build /app/client/build ./client/build
+COPY --from=ui-build /app/client/package*.json ./client/package*.json
 # Kopiere die Server-Build-Artefakte ins finale Image
+COPY --from=server-build /app/server/package*.json ./server/package*.json
 COPY --from=server-build /app/server/dist ./server/dist
 
 ENV NODE_ENV=production
