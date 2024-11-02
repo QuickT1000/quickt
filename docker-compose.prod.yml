@@ -13,8 +13,6 @@ services:
       - reverse_proxy
     volumes:
       - .:/app
-    env_file:
-      - ./.env
     restart: unless-stopped
     command: sh -c "cd client && npm start"
     ports:
