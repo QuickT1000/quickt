@@ -19,7 +19,7 @@ variables:
   DW_DATABASE_PORT: $DW_DATABASE_PORT
 
 before_script:
-  - echo "Database User: $DW_DATABASE_USER" # Debugging: Überprüfen, ob die Variable gesetzt ist
+  - echo "$DW_DATABASE_USER"
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
 build:
