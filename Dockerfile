@@ -2,7 +2,7 @@ FROM node:18.20.1-alpine AS ui-build
 WORKDIR /app
 COPY client/ ./client/
 WORKDIR /app/client
-RUN npm install && npm run build && ls -la ./dist
+RUN npm install && npm run build && ls -la
 
 FROM node:18.20.1-alpine AS server-build
 WORKDIR /app

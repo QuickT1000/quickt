@@ -4,6 +4,7 @@
     "jest.setup.ts"
   ],
   "outDir": "./dist",
+  "rootDir": "./client",
   "exclude":[
     "./node_modules",
     "react/require-default-props"
