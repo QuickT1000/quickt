@@ -7,7 +7,7 @@ services:
       traefik.http.routers.dw-translations.rule: "Host(`quickt.de`)"
       traefik.http.routers.dw-translations.tls: "true"
       traefik.http.services.dw-translations.loadbalancer.server.port: "3002"
-    working_dir: /app
+    working_dir: /client
     user: node
     networks:
       - reverse_proxy
@@ -22,7 +22,7 @@ services:
     image: node:18.20.1-slim
     labels:
       traefik.enable: "false"
-    working_dir: /app
+    working_dir: /server
     user: node
     ports:
       - "3001:3001"
