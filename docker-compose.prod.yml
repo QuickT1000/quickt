@@ -4,10 +4,10 @@ services:
   dw-client:
     image: ${DOCKER_REPOSITORY}
     labels:
-      traefik.http.routers.dw-translations.rule: "Host(`quickt.de`)"
-      traefik.http.routers.dw-translations.tls: "true"
-      traefik.http.services.dw-translations.loadbalancer.server.port: "3002"
-    working_dir: /app
+      traefik.http.routers.dw-translations.rule: "Host(`quickt.de`, `www.quickt.de`)"
+      traefik.http.routers.dw-translations.entrypoints: "websecure"
+      traefik.http.routers.dw-translations.tls.certresolver: "letsencrypt"
+    working_dir: /app/client
     user: node
     networks:
       - reverse_proxy
@@ -20,7 +20,7 @@ services:
     image: ${DOCKER_REPOSITORY}
     labels:
       traefik.enable: "false"
-    working_dir: /app
+    working_dir: /app/server
     user: node
     ports:
       - "3001:3001"
