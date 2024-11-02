@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   dw-client:
     image: node:18.20.1-slim
@@ -5,7 +7,6 @@ services:
       traefik.http.routers.dw-translations.rule: "Host(`quickt.de`)"
       traefik.http.routers.dw-translations.tls: "true"
       traefik.http.services.dw-translations.loadbalancer.server.port: "3002"
-      traefik.docker.network: "reverse_proxy"
     working_dir: /app
     user: node
     networks:
@@ -18,6 +19,7 @@ services:
     command: sh -c "cd client && npm start"
     ports:
       - "3000:3000"
+
   dw-server:
     image: node:18.20.1-slim
     labels:
@@ -34,6 +36,7 @@ services:
       - ./.env
     restart: unless-stopped
     command: sh -c "cd server && npm run start"
+
   dw-database:
     image: "postgres:11"
     labels:
@@ -56,8 +59,8 @@ services:
       - reverse_proxy
 
 networks:
-  reverse_proxy:
-    external: true
+  reverse_proxy:  # Automatisch erstellt, keine externe Abhängigkeit
 
 volumes:
   database-data:
+    driver: local
