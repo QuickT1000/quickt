@@ -39,7 +39,7 @@ prod:
     - tools
   stage: prod
   script:
-    - docker-compose up --force-recreate -d
+    - docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --force-recreate -d
   only:
     - main
   environment: prod

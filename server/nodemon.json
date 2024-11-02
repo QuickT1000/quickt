@@ -1,7 +1,7 @@
 {
     "ignore": [".git", "node_modules/", "dist/", "lib", "coverage/"],
     "watch": ["server/**/*.ts"],
-    "exec": "ts-node ./server.ts",
+    "exec": "ts-node ./src/server.ts",
     "execMap": {
         "ts": "node -r ts-node/register"
     },
