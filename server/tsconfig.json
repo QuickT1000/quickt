@@ -15,6 +15,7 @@
     "typeRoots": [
       "./node_modules/@types" // Default type definitions
     ],
+    "baseUrl": "./src",
     "paths": {
       "@interfaces/*": ["./src/interfaces/*"],
       "@models/*": ["./src/models/*"],
