@@ -7,12 +7,10 @@ services:
       traefik.http.routers.dw-translations.rule: "Host(`quickt.de`)"
       traefik.http.routers.dw-translations.tls: "true"
       traefik.http.services.dw-translations.loadbalancer.server.port: "3002"
-    working_dir: /app/client
+    working_dir: /app
     user: node
     networks:
       - reverse_proxy
-    volumes:
-      - .:/app
     restart: unless-stopped
     command: sh -c "ls -la && npm start"
     ports:
@@ -22,14 +20,12 @@ services:
     image: ${DOCKER_REPOSITORY}
     labels:
       traefik.enable: "false"
-    working_dir: /app/server
+    working_dir: /app
     user: node
     ports:
       - "3001:3001"
     networks:
       - reverse_proxy
-    volumes:
-      - .:/app
     restart: unless-stopped
     command: sh -c "ls -la && npm start"
 
