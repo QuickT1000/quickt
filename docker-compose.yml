@@ -1,4 +1,4 @@
-version: '3.8'
+version: '2.1'  # Oder eine andere unterstützte Version
 
 services:
   dw-client:
@@ -59,8 +59,7 @@ services:
       - reverse_proxy
 
 networks:
-  reverse_proxy:  # Automatisch erstellt, keine externe Abhängigkeit
+  reverse_proxy:
 
 volumes:
   database-data:
-    driver: local
