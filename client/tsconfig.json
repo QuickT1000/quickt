@@ -1,11 +1,16 @@
 {
+  "include": [
+    "src/**/*",
+    "jest.setup.ts"
+  ],
+  "outDir": "./dist",
   "exclude":[
     "./node_modules",
-    "client/dist",
     "react/require-default-props"
   ],
   "compilerOptions": {
     "jsx": "react",
+    "skipLibCheck": true,
     "paths": {
       "@components/*": ["./src/components/*"],
       "@services/*": ["./src/services/*"],

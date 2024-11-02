@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "skipLibCheck": true,
+    "strict": false
+  },
+  "include": ["server/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

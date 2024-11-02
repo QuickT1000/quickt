@@ -14,4 +14,3 @@ fi
 
 installService "client"
 installService "server"
-installService "libraries"

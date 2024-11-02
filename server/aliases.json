@@ -1,9 +1,9 @@
 {
-  "@adapter": "./adapter",
-  "@controller": "./server/controller",
-  "@repository": "./server/repository",
-  "@usecases": "./server/usecases",
-  "@config": "./server/config",
-  "@server": "./server",
-  "@services": "./server/services"
+  "@adapter": "./src/adapter",
+  "@controller": "./src/controller",
+  "@repository": "./src/repository",
+  "@usecases": "./src/usecases",
+  "@config": "./src/config",
+  "@services": "./src/services",
+  "@libraries": "./src/libraries"
 }
