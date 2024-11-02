@@ -19,10 +19,12 @@ WORKDIR /app
 
 # Kopiere die Client-Build-Artefakte ins finale Image
 COPY --from=ui-build /app/client/build ./client/build
-COPY --from=ui-build /app/client/package*.json ./client/
+COPY --from=ui-build /app/client/package.json ./client/
 # Kopiere die Server-Build-Artefakte ins finale Image
-COPY --from=server-build /app/server/package*.json ./server/
+COPY --from=server-build /app/server/package.json ./server/
 COPY --from=server-build /app/server/dist ./server/dist
+
+RUN ls -la
 
 ENV NODE_ENV=production
 EXPOSE 3001
