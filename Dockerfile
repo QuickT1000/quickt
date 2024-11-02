@@ -17,16 +17,8 @@ RUN rm -rf ./dist && npm run build:prod && ls -la dist
 FROM node:18.20.1-alpine
 WORKDIR /app
 
-# Kopiere die Client-Build-Artefakte ins finale Image
-COPY --from=ui-build /app/client/build ./client/build
-COPY --from=ui-build /app/client/node_modules ./client/node_modules
-COPY --from=ui-build /app/client/package.json ./client/
-COPY --from=ui-build /app/client/craco.config.js ./client/
-COPY --from=ui-build /app/client/public ./client/public
-# Kopiere die Server-Build-Artefakte ins finale Image
-COPY --from=server-build /app/server/package.json ./server/
-COPY --from=server-build /app/server/node_modules ./server/node_modules
-COPY --from=server-build /app/server/dist ./server/dist
+COPY --from=ui-build /app/client ./client
+COPY --from=server-build /app/server ./server
 
 RUN ls -la
 
