@@ -26,7 +26,7 @@ export class Server {
     constructor(port: number = 3000) {
         this.server = express();
         this.port = process.env['PORT'] || port;
-        this.distFolder = join(require('path').resolve('../'), '/client/dist/');
+        this.distFolder = join(require('path').resolve('../'), '/client/build/');
         this.publicFolder = join(require('path').resolve('../'), '/client/public/');
     }
 
