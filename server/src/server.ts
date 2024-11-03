@@ -21,14 +21,13 @@ export class Server {
     server: any;
     port: any;
     distFolder: string;
+    publicFolder: string;
 
     constructor(port: number = 3000) {
         this.server = express();
         this.port = process.env['PORT'] || port;
-
-        this.distFolder = join(require('path').resolve('../'), '/client/public/');
-        console.log(require('path').resolve('../'), ' <------ this.distFolder ------ ');
-
+        this.distFolder = join(require('path').resolve('../'), '/client/dist/');
+        this.publicFolder = join(require('path').resolve('../'), '/client/public/');
     }
 
     init() {
@@ -44,7 +43,7 @@ export class Server {
         this.server.use('/api/images', express.static(path.join(__dirname, 'images')));
 
         this.server.get('/*', (req: Request, res: Response) => {
-            res.sendFile(this.distFolder + '/index.html');
+            res.sendFile(this.publicFolder + '/index.html');
         });
 
         this.server.use(errorMiddleware);
