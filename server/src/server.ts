@@ -64,7 +64,7 @@ export class Server {
             res.append('Cache-Control', 'no-cache, private');
             res.send('ok');
         });
-        server.use('/api/images', express.static('public/images'));
+        server.use('/api/images', express.static('server/src/images'));
         server.use('/files', express.static('server/data'));
         server.use(express.json({ limit: '50mb' }));
     }
