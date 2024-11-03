@@ -22,7 +22,7 @@ export class Server {
     port: any;
     distFolder: string;
 
-    constructor(port: number = 3001) {
+    constructor(port: number = 3000) {
         this.server = express();
         this.port = process.env['PORT'] || port;
         this.distFolder = join(require('path').resolve('../'), '/client/dist/');
