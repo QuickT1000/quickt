@@ -43,9 +43,6 @@ export class Server {
         this.server.use('/api/images', express.static(path.join(__dirname, 'images')));
 
         this.server.get('/*', (req: Request, res: Response) => {
-            console.log(this.distFolder, ' <------ distFolder ------ ');
-            console.log(this.publicFolder, ' <------ publicFolder ------ ');
-
             res.sendFile(this.distFolder + '/index.html');
         });
 
