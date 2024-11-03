@@ -37,7 +37,7 @@ Desktop:~/projects/quickt$ docker-compose up
 
 
             <DwHeader navigation={getMainNavigation()}>
-                <div id="logo"><img src="/api/images/logo.png" alt="quickT"/>quickT</div>
+                <div id="logo"><img src="/logo.png" alt="quickT"/>quickT</div>
             </DwHeader>
 
             <div className={'container'}>

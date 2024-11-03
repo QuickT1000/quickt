@@ -17,7 +17,7 @@ export const LandingPage = () => {
         <div className={'landingpage'}>
 
             <DwHeader navigation={getMainNavigation()}>
-                <div id="logo"><img src="/api/images/logo.png" alt="quickT"/>quickT</div>
+                <div id="logo"><img src="/logo.png" alt="quickT"/>quickT</div>
             </DwHeader>
 
             <section className="main-box">

@@ -40,7 +40,7 @@ export class Server {
         new TranslationsController(this.server);
         new ConfigurationsController(this.server);
 
-        this.server.use('/api/images', express.static(path.join(__dirname, 'images')));
+        this.server.use('/api/images', express.static('server/src/images'));
 
         this.server.get('/*', (req: Request, res: Response) => {
             res.sendFile(this.distFolder + '/index.html');
@@ -61,7 +61,7 @@ export class Server {
             res.append('Cache-Control', 'no-cache, private');
             res.send('ok');
         });
-        server.use('/api/images', express.static('server/src/images'));
+
         server.use('/files', express.static('server/data'));
         server.use(express.json({ limit: '50mb' }));
     }

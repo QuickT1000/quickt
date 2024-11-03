@@ -197,7 +197,7 @@ const TranslationsPage = () => {
     return (
         <>
             <DwHeader navigation={getMainNavigation()}>
-                <div id="logo"><img src="/api/images/logo.png" alt="quickT"/>quickT</div>
+                <div id="logo"><img src="/logo.png" alt="quickT"/>quickT</div>
                 <div id="extras" className="dw-settings d-flex">
                     {renderClientsSelect()}
                     <DwEnvironmentSelect></DwEnvironmentSelect>
