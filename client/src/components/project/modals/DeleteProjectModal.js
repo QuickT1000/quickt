@@ -5,7 +5,7 @@ import DeleteForm from "../forms/DeleteForm";
 
 const DeleteProjectModal = (props) => {
     const {onClose, onSave, data, showModal, modal} = props;
-    const [deleteButtonActive, setShowModal] = useState(true);
+    const [deleteButtonActive, setDeleteButtonActive] = useState(true);
 
     const handleDeleteProject = () => {
         onSave(data);
@@ -18,7 +18,7 @@ const DeleteProjectModal = (props) => {
                 <Modal.Title>Delete Project</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <DeleteForm data={data} setDeleteButtonActive={setShowModal}/>
+                <DeleteForm data={data} setDeleteButtonActive={setDeleteButtonActive}/>
             </Modal.Body>
             <Modal.Footer>
                 <DwButtons button='delete' onClick={handleDeleteProject} disabled={deleteButtonActive}/>

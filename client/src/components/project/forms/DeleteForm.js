@@ -3,13 +3,13 @@ import React from "react";
 import Alert from "react-bootstrap/Alert";
 
 const DeleteForm = (props) => {
-    const { data, setShowModal } = props;
+    const { data, setDeleteButtonActive } = props;
 
     const onDeleteTextInput = (e) => {
         if (e.target.value === data.projectName) {
-            setShowModal(false);
+            setDeleteButtonActive(false);
         } else {
-            setShowModal(true);
+            setDeleteButtonActive(true);
         }
     }
 
