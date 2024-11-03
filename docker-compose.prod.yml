@@ -15,6 +15,9 @@ services:
       traefik.http.routers.quickt-https.tls.certresolver: "letsencrypt"
     working_dir: /app/client
     user: node
+    environment:
+      - HOST=0.0.0.0
+      - DANGEROUSLY_DISABLE_HOST_CHECK=true
     networks:
       - default
     restart: unless-stopped

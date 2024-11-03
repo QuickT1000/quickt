@@ -57,9 +57,15 @@ cleanup:
   tags:
     - tools
   script:
+    # Stoppe alle laufenden Container, die das aktuelle Image verwenden
     - docker ps -q --filter ancestor=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME | xargs -r docker stop
+    # Warte einen Moment, um sicherzustellen, dass alle Container gestoppt sind
+    - sleep 2
+    # Entferne alle gestoppten Container, die das aktuelle Image verwenden
     - docker ps -a -q --filter ancestor=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME | xargs -r docker rm
-    - docker rmi $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --force
+    # Lösche das aktuelle Image
+    - docker rmi $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --force || echo "Image kann nicht gelöscht werden, da es von einem laufenden Container verwendet wird"
+    # Lösche alle unbenutzten (dangling) Images
     - docker rmi $(docker images -f "dangling=true" -q) --force
 
 
