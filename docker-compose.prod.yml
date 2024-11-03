@@ -5,7 +5,7 @@ services:
     image: ${DOCKER_REPOSITORY}
     container_name: "quickt_client"
     labels:
-      traefik.http.routers.quickt-http.rule: "Host(`quickt.de`, `www.quickt.de`)"
+      traefik.http.routers.quickt-http.rule: "Host(`quickt.de`)"
       traefik.http.routers.quickt-http.entrypoints: "web"
       traefik.http.routers.quickt-http.middlewares: "redirect-to-https"
       traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: "https"

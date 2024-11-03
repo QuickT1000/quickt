@@ -57,5 +57,9 @@ cleanup:
   tags:
     - tools
   script:
-    - docker rmi $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - docker ps -q --filter ancestor=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME | xargs -r docker stop
+    - docker ps -a -q --filter ancestor=$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME | xargs -r docker rm
+    - docker rmi $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME --force
     - docker rmi $(docker images -f "dangling=true" -q) --force
+
+
