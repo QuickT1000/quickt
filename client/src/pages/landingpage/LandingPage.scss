@@ -1,9 +1,15 @@
 .landingpage {
 
+  #logo {
+    color: #6e3cc3;
+    img {
+      padding-right: 5px;
+    }
+  }
+
   .main-box {
     background-position: center top;
     background-repeat: no-repeat;
-    background-color: #125252;
     position: relative;
     color: #000;
     text-align: center;

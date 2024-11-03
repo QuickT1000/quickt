@@ -17,7 +17,7 @@ export const LandingPage = () => {
         <div className={'landingpage'}>
 
             <DwHeader navigation={getMainNavigation()}>
-                <div id="logo"><img src="/logo.png" alt="quickT"/>quickT</div>
+                <div id="logo"><img src="/logo.png" alt="quickt"/>quickt</div>
                 <div id="extras" className="dw-settings d-flex"><a target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=CTVTA7GG8AVQU"><img height="40" src="/coffee.png"
                                                                                 alt="coffee"/></a></div>
             </DwHeader>
@@ -27,7 +27,7 @@ export const LandingPage = () => {
                     <div className="box">
                         <span className="text">
                         <h1>
-                            <strong>Quick</strong> <strong>T</strong>ranslations
+                            <strong>it´s quickt!</strong>
                         </h1>
                         <p>
                             Free, Open Source, Easy to Use, Fully Customizable, <strong className={'color2'}>AI Support</strong>, Quick and Easy Deployment.
