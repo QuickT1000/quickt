@@ -25,7 +25,10 @@ export class Server {
     constructor(port: number = 3000) {
         this.server = express();
         this.port = process.env['PORT'] || port;
-        this.distFolder = join(require('path').resolve('../'), '/client/dist/');
+
+        this.distFolder = join(require('path').resolve('../'), '/client/public/');
+        console.log(require('path').resolve('../'), ' <------ this.distFolder ------ ');
+
     }
 
     init() {
@@ -47,7 +50,7 @@ export class Server {
         this.server.use(errorMiddleware);
 
         this.server.listen(this.port, () => {
-           // Logger.info(`Node Express server listening on http://localhost:${this.port}`);
+           console.log(`Node Express server listening on http://localhost:${this.port}`);
         });
 
         return this.server;
