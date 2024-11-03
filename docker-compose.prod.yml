@@ -1,12 +1,13 @@
 version: '2'
 
 services:
-  dw-client:
+  quickt-client:
     image: ${DOCKER_REPOSITORY}
+    container_name: "quickt_client"
     labels:
-      traefik.http.routers.dw-translations.rule: "Host(`quickt.de`, `www.quickt.de`)"
-      traefik.http.routers.dw-translations.entrypoints: "websecure"
-      traefik.http.routers.dw-translations.tls.certresolver: "letsencrypt"
+      traefik.http.routers.quickt.rule: "Host(`quickt.de`, `www.quickt.de`)"
+      traefik.http.routers.quickt.entrypoints: "websecure"
+      traefik.http.routers.quickt.tls.certresolver: "letsencrypt"
     working_dir: /app/client
     user: node
     networks:
@@ -14,8 +15,9 @@ services:
     restart: unless-stopped
     command: sh -c "ls -la && npm start"
 
-  dw-server:
+  quickt-server:
     image: ${DOCKER_REPOSITORY}
+    container_name: "quickt_server"
     labels:
       traefik.enable: "false"
     working_dir: /app/server
@@ -34,8 +36,9 @@ services:
     restart: unless-stopped
     command: sh -c "ls -la && npm start"
 
-  dw-database:
+  quickt-database:
     image: "postgres:11"
+    container_name: "quickt_database"
     labels:
       traefik.enable: "false"
     environment:

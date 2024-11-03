@@ -23,6 +23,6 @@ COPY --from=server-build /app/server ./server
 RUN ls -la
 
 ENV NODE_ENV=production
-EXPOSE 3001
+EXPOSE 3000
 
 CMD ["node", "./server/dist/src/server.js"]

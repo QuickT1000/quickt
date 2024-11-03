@@ -46,7 +46,6 @@ prod:
     - tools
   script:
     - docker-compose -f docker-compose.prod.yml up --force-recreate -d
-    - docker exec -it quickt_dw-server_1 env
   only:
     - main
   environment:
