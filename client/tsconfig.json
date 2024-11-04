@@ -3,7 +3,7 @@
     "src/**/*",
     "jest.setup.ts"
   ],
-  "outDir": "./build",
+  "outDir": "./dist",
   "rootDir": "./client",
   "exclude":[
     "./node_modules",
