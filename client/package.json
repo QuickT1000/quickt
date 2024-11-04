@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false craco start --project ../tsconfig.json",
-    "build": "craco scripts",
+    "build": "craco build",
     "test": "craco test",
     "eject": "craco eject"
   },
