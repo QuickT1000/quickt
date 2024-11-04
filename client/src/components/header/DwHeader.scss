@@ -16,6 +16,7 @@
 
     nav {
         padding: 0;
+        background-color: #fff;
     }
 
     .dw-projects-select {
@@ -47,6 +48,19 @@
         top: -4px;
         padding: 0;
         margin: 0;
+    }
+
+
+
+    @media (max-width: 840px) {
+        .navbar-nav {
+            height: 120px;
+        }
+
+        .dw-settings {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 15px;
+        }
     }
 }
 
