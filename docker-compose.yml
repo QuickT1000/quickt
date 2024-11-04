@@ -1,12 +1,13 @@
 version: '2'
 
 services:
-  dw-client:
+  quickt-client:
     image: ${DOCKER_REPOSITORY}
+    container_name: "quickt_client"
     labels:
-      traefik.http.routers.dw-translations.rule: "Host(`quickt.de`)"
-      traefik.http.routers.dw-translations.tls: "true"
-      traefik.http.services.dw-translations.loadbalancer.server.port: "3002"
+      traefik.http.routers.quickt.rule: "Host(`quickt.localhost`)"
+      traefik.http.routers.quickt.tls: "true"
+      traefik.http.services.quickt.loadbalancer.server.port: "3001"
     working_dir: /app
     user: node
     networks:
@@ -15,13 +16,14 @@ services:
       - .:/app
     env_file:
       - ./.env
-    restart: unless-stopped
-    command: sh -c "cd client && npm start"
     ports:
       - "3000:3000"
+    restart: unless-stopped
+    command: sh -c "cd client && npm start"
 
-  dw-server:
+  quickt-server:
     image: ${DOCKER_REPOSITORY}
+    container_name: "quickt_server"
     labels:
       traefik.enable: "false"
     working_dir: /app
@@ -37,8 +39,9 @@ services:
     restart: unless-stopped
     command: sh -c "cd server && npm run start:dev"
 
-  dw-database:
+  quickt-database:
     image: "postgres:11"
+    container_name: "quickt_database"
     labels:
       traefik.enable: "false"
     environment:

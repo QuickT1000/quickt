@@ -12,6 +12,6 @@ runCommandInService () {
 installService () {
     name=$1
     echo "Installing ${name} ..."
-    runCommandInService ${name} "build/npm.sh ${INSTALL_COMMAND}"
+    runCommandInService ${name} "scripts/npm.sh ${INSTALL_COMMAND}"
     echo "DONE."
 }
