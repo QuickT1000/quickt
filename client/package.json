@@ -22,7 +22,8 @@
     "react-router-dom": "^6.26.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
-    "react-syntax-highlighter": "^15.6.1"
+    "react-syntax-highlighter": "^15.6.1",
+    "swagger-ui-react": "^5.17.14"
   },
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false craco start --project ../tsconfig.json",

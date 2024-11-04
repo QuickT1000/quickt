@@ -9,6 +9,10 @@ export const getMainNavigation = () => {
             label: 'Get Started'
         },
         {
+            link: '/specification',
+            label: 'Specification'
+        },
+        {
             link: '/demo',
             label: 'Demo'
         }
