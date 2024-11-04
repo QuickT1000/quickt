@@ -2,13 +2,6 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "start": "npm run load-env && GENERATE_SOURCEMAP=false ./node_modules/.bin/craco start --project ../tsconfig.json",
-    "build": "npm run load-env && ./node_modules/.bin/craco scripts",
-    "test": "./node_modules/.bin/craco test",
-    "eject": "./node_modules/.bin/craco eject",
-    "load-env": "env $(cat .env | xargs)"
-  },
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -30,6 +23,13 @@
     "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
     "react-syntax-highlighter": "^15.6.1"
+  },
+  "scripts": {
+    "start": "npm run load-env && GENERATE_SOURCEMAP=false ./node_modules/.bin/craco start --project ../tsconfig.json",
+    "build": "npm run load-env && ./node_modules/.bin/craco scripts",
+    "test": "./node_modules/.bin/craco test",
+    "eject": "./node_modules/.bin/craco eject",
+    "load-env": "env $(cat .env | xargs)"
   },
   "proxy": "http://quickt-server:3000",
   "browserslist": {

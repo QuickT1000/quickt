@@ -21,7 +21,7 @@ services:
     networks:
       - default
     restart: unless-stopped
-    command: sh -c "npm start"
+    command: sh -c "ls -la && npm run build && npm start"
 
   quickt-server:
     image: ${DOCKER_REPOSITORY}
@@ -47,7 +47,7 @@ services:
     networks:
       - default
     restart: unless-stopped
-    command: sh -c "npm start"
+    command: sh -c "ls -la && npm start"
 
   quickt-database:
     image: "postgres:11"
