@@ -4,3 +4,4 @@ client/node_modules
 dist
 .env
 .idea
+.iml
