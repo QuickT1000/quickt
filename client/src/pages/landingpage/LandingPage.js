@@ -31,7 +31,7 @@ export const LandingPage = () => {
                         <span className="text">
                         <div>
                             it´s free, it´s open source, it´s easy to use <strong
-                            className={'color2'}>it´s AI supported</strong>, it´s quick and easy,
+                            className={'color2'}>it´s AI supported</strong>,
                         </div>
                             <h4>
                                 <strong>it´s quickt!</strong>

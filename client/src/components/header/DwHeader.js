@@ -6,6 +6,8 @@ import {
 } from "react-bootstrap";
 import "./DwHeader.scss";
 import {useNavigate} from "react-router-dom";
+import {FaPlus} from "react-icons/fa6";
+import Button from "react-bootstrap/Button";
 
 export const DwHeader = (props) => {
     const { navigation, children } = props;
@@ -17,6 +19,15 @@ export const DwHeader = (props) => {
 
     const navigationItems = () => {
         return navigation.map((item, idx) => {
+
+            console.log(item.label, ' <------ item.label ------ ');
+
+            if (item.label === 'Demo') {
+                return <Button onClick={onNavItemSelect.bind(null, item.link)} style={{height: '31px', marginTop: '5px'}} type={'button'} className="btn btn-primary"  size={'sm'}>
+                    <span className='icon'></span> Demo
+                </Button >
+            }
+
            return (
                <Nav.Link key={idx} eventKey={item.link}>{item.label}</Nav.Link>
            )
