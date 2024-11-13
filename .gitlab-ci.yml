@@ -22,6 +22,7 @@ variables:
   DATABASE_QUERY_TIMEOUT_MS: 10000
   DATABASE_IDLE_TIMEOUT_MS: 0
   HOST: $HOST
+  TRAEFIK_HOST: $TRAEFIK_HOST
 
 before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
