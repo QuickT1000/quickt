@@ -6,8 +6,8 @@ import { initPostgresConnection as initPostgresConnectionReturn } from '@adapter
 import { IndexController } from '@controller/index.controller';
 import {TranslationsController} from "@controller/translations.controller";
 import {ConfigurationsController} from "@controller/configurations.controller";
-import {ClientsController} from "@controller/clients.controller";
-import path from "path";
+import {ProjectsController} from "@controller/projects.controller";
+import {ChartsController} from "@controller/charts.controller";
 
 const errorMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
     console.error(err);
@@ -16,6 +16,7 @@ const errorMiddleware = (err: any, req: Request, res: Response, next: NextFuncti
         reason: err.toString()
     });
 };
+
 
 export class Server {
     server: any;
@@ -30,15 +31,16 @@ export class Server {
         this.publicFolder = join(require('path').resolve('../'), '/client/public/');
     }
 
-    init() {
+    async init() {
         initPostgresConnectionReturn();
 
         this.initServerConfigs(this.server);
 
         new IndexController(this.server);
-        new ClientsController(this.server);
+        new ProjectsController(this.server);
         new TranslationsController(this.server);
         new ConfigurationsController(this.server);
+        new ChartsController(this.server);
 
         this.server.use('/api/images', express.static('server/src/images'));
 

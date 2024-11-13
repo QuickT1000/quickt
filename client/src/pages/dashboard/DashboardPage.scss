@@ -1,0 +1,32 @@
+.dashboard {
+
+  background-position: center top;
+  background-repeat: no-repeat;
+  position: relative;
+  color: #000;
+  min-height: 970px;
+  background: url("https://quickt.de/background.png");
+  background-size: cover;
+
+  #logo {
+    color: #6e3cc3;
+    img {
+      padding-right: 5px;
+    }
+  }
+
+  .translations-chart {
+    margin: 10px;
+    max-width: 550px;
+    height: 100%;
+  }
+
+  .color1 {
+      color: #d54b63;
+  }
+  .color2 {
+      color: #aa4575;
+  }
+
+}
+

@@ -1,0 +1,33 @@
+/* DwPagination.scss */
+
+.pagination-container {
+  display: flex;
+
+  ul {
+    margin: 0;
+  }
+
+  .pagination {
+    margin-right: 5px;
+  }
+
+  .form-select {
+    line-height: 16px;
+    font-size: 15px;
+    width: 70px;
+    height: 31px;
+  }
+
+}
+
+.select-box {
+  margin-left: 1rem; /* Abstand zwischen Pagination und Select-Box */
+  height: 30px; /* Höhe der Select-Box anpassen, um sie mit Pagination-Elementen auszurichten */
+  line-height: 1.5; /* Zeilenhöhe anpassen */
+}
+
+/* Du kannst auch die Standardpadding für das Bootstrap-Formular anpassen, um es besser auszurichten */
+.form-select {
+  padding: 0.375rem 0.75rem; /* Anpassen von Padding für ein besseres Layout */
+  border-radius: 0.25rem; /* Standard Border Radius */
+}

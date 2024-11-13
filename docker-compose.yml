@@ -3,15 +3,15 @@ version: '2'
 services:
   quickt-client:
     image: ${DOCKER_REPOSITORY}
-    container_name: "quickt_client"
+    container_name: "${APPLICATION_NAME}_client"
     labels:
-      traefik.http.routers.quickt.rule: "Host(`quickt.localhost`)"
+      traefik.http.routers.quickt.rule: "Host(${TRAEFIK_HOST})"
       traefik.http.routers.quickt.tls: "true"
       traefik.http.services.quickt.loadbalancer.server.port: "3001"
     working_dir: /app
     user: node
     networks:
-      - reverse_proxy
+      - default
     volumes:
       - .:/app
     env_file:
@@ -23,7 +23,7 @@ services:
 
   quickt-server:
     image: ${DOCKER_REPOSITORY}
-    container_name: "quickt_server"
+    container_name: "${APPLICATION_NAME}_server"
     labels:
       traefik.enable: "false"
     working_dir: /app
@@ -31,7 +31,7 @@ services:
     ports:
       - "3001:3001"
     networks:
-      - reverse_proxy
+      - default
     volumes:
       - .:/app
     env_file:
@@ -41,23 +41,22 @@ services:
 
   quickt-database:
     image: "postgres:11"
-    container_name: "quickt_database"
-    labels:
-      traefik.enable: "false"
+    container_name: "${APPLICATION_NAME}_database"
     environment:
-      POSTGRES_USER: ${DW_DATABASE_USER}
-      POSTGRES_PASSWORD: ${DW_DATABASE_PASSWORD}
-      POSTGRES_DB: ${DW_DATABASE_DB}
-      PGPORT: 5433
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_DB}
     ports:
-      - "${DW_DATABASE_PORT}:5433"
+      - "5433:5432"
     volumes:
       - database-data:/var/lib/postgresql/data/
     networks:
-      - reverse_proxy
+      - default
 
 networks:
-  reverse_proxy:
+  default:
+    external:
+      name: reverse_proxy
 
 volumes:
   database-data:

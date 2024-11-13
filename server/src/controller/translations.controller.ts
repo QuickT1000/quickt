@@ -26,49 +26,49 @@ export class TranslationsController {
     }
 
     async readAction(req: any, res: any) {
-        const repository = new TranslationsRepository(req.query.client);
+        const repository = new TranslationsRepository(req.query.projectName);
         const presenter = new SearchTranslationsPresenter(req, res);
         const interactor = new SearchTranslationsInteractor(repository, req.query, presenter);
         await interactor.execute();
     }
 
     async findAction(req: any, res: any) {
-        const repository = new TranslationsRepository(req.query.client);
+        const repository = new TranslationsRepository(req.query.projectName);
         const presenter = new FindTranslationsPresenter(req, res);
         const interactor = new FindTranslationInteractor(repository, req.query.key, presenter);
         await interactor.execute();
     }
 
     async findOneAction(req: any, res: any) {
-        const repository = new TranslationsRepository(req.query.client);
+        const repository = new TranslationsRepository(req.query.projectName);
         const presenter = new FindOneTranslationsPresenter(req, res);
         const interactor = new FindOneTranslationInteractor(repository, parseInt(req.query.id), presenter);
         await interactor.execute();
     }
 
     async createAction(req: any, res: any) {
-        const repository = new TranslationsRepository(req.body.client);
+        const repository = new TranslationsRepository(req.body.projectName);
         const presenter = new CreateTranslationsPresenter(req, res);
         const interactor = new CreateTranslationsInteractor(repository, req.body, presenter);
         await interactor.execute();
     }
 
     async updateAction(req: any, res: any) {
-        const repository = new TranslationsRepository(req.body.client);
+        const repository = new TranslationsRepository(req.body.projectName);
         const presenter = new UpdateTranslationsPresenter(req, res);
         const interactor = new UpdateTranslationsInteractor(repository, req.body, presenter);
         await interactor.execute();
     }
 
     async deleteAction(req: any, res: any) {
-        const repository = new TranslationsRepository(req.body.client);
+        const repository = new TranslationsRepository(req.body.projectName);
         const presenter = new DeleteTranslationsPresenter(req, res);
         const interactor = new DeleteTranslationsInteractor(repository, req.body, presenter);
         await interactor.execute();
     }
 
     async importAction(req: any, res: any) {
-        const repository = new TranslationsRepository(req.body.client);
+        const repository = new TranslationsRepository(req.body.projectName);
         const translations = req.body.data;
         const results = await repository.bulkInsert(translations);
         res.json({ success: true, data: results });

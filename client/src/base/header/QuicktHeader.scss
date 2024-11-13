@@ -1,0 +1,41 @@
+.quickt__header {
+    background-color: #fff;
+    border-bottom: 1px solid #dadada;
+    padding: 0;
+    height: 55px;
+    z-index: 12;
+    width: 100%;
+
+
+    &__brand {
+        font-weight: bold;
+        img {
+            height: 26px;
+        }
+    }
+
+    .navbar {
+       margin-right: auto;
+        z-index: 5000;
+        background-color: #fff;
+        min-height: 100%;
+        //me-auto my-2 my-lg-0
+    }
+
+    &__extra {
+        display: flex;
+        width: 120px;
+        padding: 0;
+    }
+
+
+
+    @media (max-width: 840px) {
+        .navbar-nav {
+            height: 120px;
+        }
+    }
+}
+
+
+

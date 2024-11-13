@@ -1,5 +1,5 @@
 // ProjectService.js
-import { createClients, deleteClients, updateClients } from "../services/ClientsService";
+import { createClients, deleteClients, updateClients } from "./ProjectsService";
 import { createTranslations, updateTranslations, destroyTranslations } from "../services/TranslationsService";
 
 export const handleProjectCreation = async (projectData, setFilter, clients) => {

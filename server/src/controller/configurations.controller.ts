@@ -1,17 +1,17 @@
 import {ConfigurationsRepository} from '@repository/configurations.repository';
-import {FindOneConfigurationPresenter} from "@usecases/configurations/findOne/find-one.presenter";
-import {FindOneConfigurationInteractor} from "@usecases/configurations/findOne/find-one.interactor";
+import {ReadConfigurationPresenter} from "@usecases/configurations/read/read.presenter";
+import {ReadConfigurationInteractor} from "@usecases/configurations/read/read.interactor";
 
 export class ConfigurationsController {
 
     constructor(server: any) {
-        server.get('/api/configurations/v1/read', this.findOneAction.bind(this));
+        server.get('/api/configurations/v1/read', this.readAction.bind(this));
     }
 
-    async findOneAction(req: any, res: any) {
+    async readAction(req: any, res: any) {
         const repository = new ConfigurationsRepository();
-        const presenter = new FindOneConfigurationPresenter(req, res);
-        const interactor = new FindOneConfigurationInteractor(repository, req.query, presenter);
+        const presenter = new ReadConfigurationPresenter(req, res);
+        const interactor = new ReadConfigurationInteractor(repository, req.query, presenter);
         await interactor.execute();
     }
 }

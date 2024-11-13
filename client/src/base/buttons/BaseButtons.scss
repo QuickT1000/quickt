@@ -1,0 +1,20 @@
+.dw-buttons {
+    display: inline;
+
+    button {
+
+        margin: 1px 2px;
+
+        .icon {
+            position: relative;
+            top: -2px;
+            padding-right: 3px;
+        }
+
+        .rounded-pill {
+            font-size: 11px;
+        }
+
+    }
+
+}

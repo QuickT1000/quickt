@@ -3,14 +3,14 @@ version: '2'
 services:
   quickt-client:
     image: ${DOCKER_REPOSITORY}
-    container_name: "quickt_client"
+    container_name: "${APPLICATION_NAME}_client"
     labels:
-      traefik.http.routers.quickt-http.rule: "Host(`quickt.de`)"
+      traefik.http.routers.quickt-http.rule: "Host(${TRAEFIK_HOST})"
       traefik.http.routers.quickt-http.entrypoints: "web"
       traefik.http.routers.quickt-http.middlewares: "redirect-to-https"
       traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: "https"
 
-      traefik.http.routers.quickt-https.rule: "Host(`quickt.de`)"
+      traefik.http.routers.quickt-https.rule: "Host(${TRAEFIK_HOST})"
       traefik.http.routers.quickt-https.entrypoints: "websecure"
       traefik.http.routers.quickt-https.tls.certresolver: "letsencrypt"
     working_dir: /app/client
@@ -21,14 +21,14 @@ services:
     networks:
       - default
     restart: unless-stopped
-    command: sh -c "ls -la && npm run build && npm start"
+    command: sh -c "npm start"
 
   quickt-server:
     image: ${DOCKER_REPOSITORY}
-    container_name: "quickt_server"
+    container_name: "${APPLICATION_NAME}_server"
     labels:
-      traefik.enable: "true"  # Setze auf true
-      traefik.http.routers.quickt.rule: "Host(`quickt.de`, `www.quickt.de`)"
+      traefik.enable: "true"
+      traefik.http.routers.quickt.rule: "Host(${TRAEFIK_HOST})"
       traefik.http.routers.quickt.entrypoints: "websecure"
       traefik.http.routers.quickt.tls.certresolver: "letsencrypt"
     ports:
@@ -36,31 +36,31 @@ services:
     working_dir: /app/server
     user: node
     environment:
-      DW_DATABASE_DB: ${DW_DATABASE_DB}
-      DW_DATABASE_PORT: ${DW_DATABASE_PORT}
-      DW_DATABASE_USER: ${DW_DATABASE_USER}
-      DW_DATABASE_HOST: ${DW_DATABASE_HOST}
-      DW_DATABASE_PASSWORD: ${DW_DATABASE_PASSWORD}
-      DATABASE_CONNECTION_TIMEOUT_MS: 5000
-      DATABASE_QUERY_TIMEOUT_MS: 10000
-      DATABASE_IDLE_TIMEOUT_MS: 0
+      DATABASE_DB: ${DATABASE_DB}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_CONNECTION_TIMEOUT_MS: ${DATABASE_CONNECTION_TIMEOUT_MS}
+      DATABASE_QUERY_TIMEOUT_MS: ${DATABASE_QUERY_TIMEOUT_MS}
+      DATABASE_IDLE_TIMEOUT_MS: ${DATABASE_IDLE_TIMEOUT_MS}
     networks:
       - default
     restart: unless-stopped
-    command: sh -c "ls -la && npm start"
+    command: sh -c "npm start"
 
   quickt-database:
     image: "postgres:11"
-    container_name: "quickt_database"
+    container_name: "${APPLICATION_NAME}_database"
     labels:
       traefik.enable: "false"
     environment:
-      POSTGRES_USER: ${DW_DATABASE_USER}
-      POSTGRES_PASSWORD: ${DW_DATABASE_PASSWORD}
-      POSTGRES_DB: ${DW_DATABASE_DB}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_DB}
       PGPORT: 5433
     ports:
-      - "${DW_DATABASE_PORT}:5433"
+      - "${DATABASE_PORT}:5433"
     volumes:
       - /data/postgres-data:/var/lib/postgresql/data/
     networks:

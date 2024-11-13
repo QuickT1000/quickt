@@ -2,27 +2,21 @@ import { databaseAdapter } from '../adapter/postgres';
 
 export class ConfigurationsRepository {
 
-  public async findOne(model: any): Promise<any> {
-
-    let queryString = `
-        SELECT "${model.type}"
-        FROM "${model.client}".configurations
-    `;
-
-    const dbResult = await databaseAdapter.query(queryString);
-
+  public async read(projectName: string): Promise<any> {
+    const dbResult = await databaseAdapter.query(`SELECT * FROM "${projectName}".configurations`);
     return dbResult[0];
   }
 
-  async create(query): Promise<any> {
-    const value = JSON.stringify({ locales: query.locales });
+  async create(body: any): Promise<any> {
+    const locales = JSON.stringify(body.locales);
 
     try {
       const sql = `
-            INSERT INTO "${query.projectName}".configurations (client_config)
-            VALUES ('${value}') RETURNING *
+            INSERT INTO "${body.projectName}".configurations (locales, "defaultLocale")
+            VALUES ('${locales}', '${body.defaultLocale}') RETURNING *
         `;
-      const result = await databaseAdapter.query(sql); // Hier nur 1 Argument
+      const result = await databaseAdapter.query(sql);
+
       return result[0];
     } catch (error) {
       console.error("Error executing query:", error);
@@ -31,7 +25,20 @@ export class ConfigurationsRepository {
   }
 
   async update(body): Promise<any> {
-
+    const locales = JSON.stringify(body.locales);
+    const result = await databaseAdapter.query(
+        `
+    UPDATE
+      "${body.projectName}".configurations
+    SET 
+      locales = '${locales}', 
+      "defaultLocale" = '${body.defaultLocale}', 
+      updated_at = NOW() 
+    WHERE id = 1
+      RETURNING *  
+    `
+    );
+    return result[0];
   }
 
 

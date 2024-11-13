@@ -8,17 +8,15 @@ moment.locale('de');
 
 export class TranslationsRepository {
 
-  client: string;
-
-  constructor(client = 'DW001') {
-    this.client = client;
+  constructor(private projectName: string) {
+    this.projectName = projectName;
   }
 
   public async findOne(id: number): Promise<any> {
 
     let queryString = `
         SELECT key, value, country, language
-        FROM "${this.client}".translations
+        FROM "${this.projectName}".translations
         WHERE id = ${id}
     `;
 
@@ -30,7 +28,7 @@ export class TranslationsRepository {
   public async find(key: string): Promise<any> {
     let queryString = `
         SELECT id, key, value, country, language
-        FROM "${this.client}".translations
+        FROM "${this.projectName}".translations
         WHERE key = '${key}'
     `;
 
@@ -40,7 +38,7 @@ export class TranslationsRepository {
   async create(model: TranslationModel): Promise<any> {
     const result = await databaseAdapter.query(
         `
-        INSERT INTO "${this.client}".translations (key, value, language, country)
+        INSERT INTO "${this.projectName}".translations (key, value, language, country)
         VALUES ('${model.key}', '${model.value}', '${model.language}', '${model.country}') RETURNING *
       `
     );
@@ -51,14 +49,13 @@ export class TranslationsRepository {
     const result = await databaseAdapter.query(
         `
     UPDATE
-      "${this.client}".translations
+      "${this.projectName}".translations
     SET 
       value = '${model.value}', 
       key = '${model.key}', 
       updated_at = NOW() 
-    WHERE 
-      id = ${model.id} 
-    RETURNING *  
+    WHERE id = ${model.id}
+      RETURNING *  
     `
     );
     return result[0];
@@ -68,7 +65,7 @@ export class TranslationsRepository {
     await databaseAdapter.query(
         `
         DELETE
-        FROM "DW001".translations
+        FROM "${this.projectName}".translations
         WHERE id = ${model.id}
       `
     );
@@ -77,15 +74,14 @@ export class TranslationsRepository {
   async deleteByLocale(locale): Promise<any> {
     const country = getCountryByLocale(locale);
     const language = getLanguageByLocale(locale);
-
-    /*await databaseAdapter.query(
+    await databaseAdapter.query(
         `
         DELETE
-        FROM "DW001".translations
-        WHERE country = ${country}
-        AND language = ${language}
+        FROM "${this.projectName}".translations
+        WHERE country = '${country}'
+        AND language = '${language}'
       `
-    );*/
+    );
   }
 
   async search(query): Promise<any> {
@@ -93,7 +89,7 @@ export class TranslationsRepository {
 
     let queryString = `
       SELECT id, key, value, country, language, Count(*) Over () as total
-      FROM "${query.client}".translations
+      FROM "${query.projectName}".translations
       WHERE key ILIKE '%${key}%'
     `;
 
@@ -123,9 +119,10 @@ export class TranslationsRepository {
 
     try {
       const dbResult = await databaseAdapter.query(queryString);
+      const entries = dbResult.map(({ total, ...rest }) => rest);
 
       return {
-        entries: dbResult,
+        entries: entries,
         pagination: {
           total: Number(dbResult[0].total),
           pageIndex: index,
@@ -142,9 +139,34 @@ export class TranslationsRepository {
         }
       }
     }
-
   }
 
+  async findByProjectNameAndCountryAndLanguage(projectName, country, language): Promise<any> {
+    let queryString = `
+      SELECT country, Count(*) Over () as total
+      FROM "${projectName}".translations
+      WHERE country = '${country}'
+    `;
+
+    if (language !== '') {
+      queryString += ` AND language = '${language}'`
+    }
+
+    queryString += ' ORDER BY updated_at DESC';
+
+    try {
+      const dbResult = await databaseAdapter.query(queryString);
+      return {
+        total: Number(dbResult[0].total),
+        country: dbResult[0].country
+      };
+    } catch (e) {
+      return {
+        total: 0,
+        country: ''
+      }
+    }
+  }
 
   async bulkInsert(data: Record<string, Record<string, string>>): Promise<any> {
     const queryValues: string[] = [];
@@ -174,19 +196,18 @@ export class TranslationsRepository {
     }
 
     const query = `
-        INSERT INTO "${this.client}".translations (key, value, language, country)
+        INSERT INTO "${this.projectName}".translations (key, value, language, country)
         VALUES ${queryValues.join(', ')}
         RETURNING *;
     `;
 
-    const result = await databaseAdapter.query(query);
-    return result;
+    try {
+      const result = await databaseAdapter.query(query);
+      return result;
+    } catch (e) {
+      console.log(e);
+      return 'database error while bulkimport'
+    }
+
   }
-
-
-
-
-
-
-
 }

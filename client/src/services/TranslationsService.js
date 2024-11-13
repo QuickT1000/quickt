@@ -1,36 +1,46 @@
-export async function updateTranslations({client, entries}) {
+import {paginationDefaults} from "../base/pagination/defaults/pagination.defaults";
+
+export async function updateTranslations({projectName, entries}) {
     const response = await fetch('/api/translations/v1/update', {
         method: 'post',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({client, entries})
+        body: JSON.stringify({projectName, entries})
     });
 
     return await response.json();
 }
 
-export async function createTranslations({client, entries}) {
+export async function createTranslations({projectName, entries}) {
     const response = await fetch('/api/translations/v1/create', {
         method: 'post',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({client, entries})
+        body: JSON.stringify({projectName, entries})
     });
 
     return await response.json();
 }
 
-export async function destroyTranslations({client, entries}) {
+export async function destroyTranslations({projectName, entries}) {
     const response = await fetch('/api/translations/v1/destroy', {
         method: 'post',
         headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({client, entries})
+        body: JSON.stringify({projectName, entries})
     });
 
     return await response.json();
 }
 
-export async function searchTranslation(props) {
-    const { client, key, value, country, language, pagination } = props;
-    let url = `/api/translations/v1/read?key=${key}&value=${value}&country=${country}&language=${language}&client=${client}`;
+export async function readTranslations(props) {
+    const {
+        projectName = '',
+        key = '',
+        value = '',
+        country = '',
+        language = '',
+        pagination = paginationDefaults
+    } = props;
+
+    let url = `/api/translations/v1/read?key=${key}&value=${value}&country=${country}&language=${language}&projectName=${projectName}`;
     if (pagination) {
         url += `&pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}`
     }
@@ -38,14 +48,14 @@ export async function searchTranslation(props) {
     return await response.json();
 }
 
-export async function importTranslations(client, data, locale) {
+export async function importTranslations(projectName, data, locale) {
     const response = await fetch(`/api/translations/v1/import`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            client: client,
+            projectName: projectName,
             country: locale.country,
             language: locale.language,
             data: data
