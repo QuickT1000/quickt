@@ -12,7 +12,7 @@ export class FindOneConfigurationInteractor {
 
   async execute() {
     try {
-      const translations = await this.repository.findOne(this.model);
+      const translations = await this.repository.read(this.model);
       this.presenter.present(translations);
     } catch (e) {
       return this.presenter.presentError(e.toString());
