@@ -16,18 +16,24 @@ export const GetStartedPage = () => {
 
 ---
 
+## Environments
+You need to rename .env.dist to .env
+~~~bash
+mv ./.env.dist .env
+~~~
+
 ## Install Project
         
-go to root folder of the cloned project and install the deplendencies:
+Go to root folder of the cloned project and install the deplendencies:
 
 ~~~bash
-Desktop:~/projects/quickt$ ./build/build.sh
+./build/build.sh
 ~~~
 
 ## Docker
-to start up the application run:  
+To start up the application run:  
 ~~~bash
-Desktop:~/projects/quickt$ docker-compose up
+docker-compose up
 ~~~
    
 `;
