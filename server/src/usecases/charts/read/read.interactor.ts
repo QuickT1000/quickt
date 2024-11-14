@@ -17,6 +17,7 @@ export class ReadChartsInteractor {
     private presenter: ReadChartsPresenter,
     private body: any
   ) {
+
   }
 
   async execute() {

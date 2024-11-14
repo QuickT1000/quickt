@@ -11,20 +11,55 @@ export const UserGuidePage = () => {
 
     const markdown = `## User Guide
 
-- quick user guide
+- import
+- export
 
 
 ---
 
-## Translations
-
-
-## Projects
-
-
 ## Import
 
-## Export
+You can import JSON and CSV files. The files need to have following structures.
+Make sure that you have created a project first with the needed locales.
+
+Here is an example JSON file: 
+~~~json
+ {
+  "sk-SK": {
+    "dummy": {
+      "feature": {
+        "login": "Prihlásenie používateľa",
+        "logout": "Odhlásiť sa",
+      },
+      "feature2": {
+        "import": "Importovať",
+        "export": "Exportovať",
+      }
+    },
+    "dummy2": {
+      "featureX1": {
+        "title": "Ahoj, ako sa máš?",
+        "welcome": "Vitajte v aplikácii",
+      }
+    }
+  }
+}
+~~~
+
+Here an example of a CSV file:
+
+~~~csv
+dummy.feature.logout,Abmelden,DE,de
+dummy.feature.register,Registrieren,DE,de
+dummy.feature.forgot_password,Passwort vergessen,DE,de
+dummy.feature.profile,Profil,DE,de
+dummy.feature.login,Benutzeranmeldung,DE,de
+~~~
+
+
+## Export 
+
+For exporting translations you need to select the entries you want to export in the translations table. Then click on export and choose your file format. 
         
 `;
 
@@ -35,7 +70,7 @@ export const UserGuidePage = () => {
                 <div id="logo"><img src="/logo.png" alt="quickt"/>quickt</div>
                 <div id="extras" className="dw-settings d-flex"><a target="_blank"
                                                                    href="https://www.paypal.com/donate/?hosted_button_id=CTVTA7GG8AVQU"><img
-                    height="40" src="/coffee.png"
+                    height="30" src="/coffee.png"
                     alt="coffee"/></a></div>
             </QuicktHeader>
 

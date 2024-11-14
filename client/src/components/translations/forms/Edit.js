@@ -10,7 +10,7 @@ import BaseCard from "../../../base/card/BaseCard";
 
 const Edit = (props) => {
     const localFormRef = useRef();
-    const {data, title, onUpdate, onDelete, onCreate} = props;
+    const {data, title, onUpdate, onDelete, onCreate, onDeleteBtnClick, onRenameBtnClick} = props;
     const {key, project} = useParams();
     const location = useLocation();
     const navigate = useNavigate();
@@ -42,6 +42,7 @@ const Edit = (props) => {
         if (data && data.length > 0) {
             const formattedTranslations = data.map(item => ({
                 id: item.id,
+                translation_id: item.id,
                 language: item.language,
                 country: item.country,
                 value: item.value || '',
@@ -124,44 +125,30 @@ const Edit = (props) => {
 
     const handleDelete = async () => {
         const currentKey = watch('key');
-        const translationsToDelete = fields.map(field => ({
-            id: field.id,
-            key: currentKey,
-            country: field.country,
-            language: field.language
-        }));
+
+        const translationsToDelete = fields.filter(field => {
+            if (typeof field.translation_id !== 'undefined') {
+                return ({
+                    id: field.translation_id,
+                    key: currentKey,
+                    country: field.country,
+                    language: field.language
+                });
+            }
+        });
 
         try {
-            await onDelete(translationsToDelete);
-            success('Key deleted');
-            navigate('/');
+            await onDeleteBtnClick(translationsToDelete);
         } catch (error) {
             console.error('Error deleting translations:', error);
             // Here you could add error toast notification
         }
     };
 
-    const handleRename = async (newKey) => {
-        const oldKey = watch('key');
-        if (oldKey === newKey) return;
-
-        const updatedTranslations = fields.map(field => ({
-            ...field,
-            key: newKey
-        }));
-
-        try {
-            await onUpdate(updatedTranslations);
-            setValue('key', newKey);
-            navigate(`/details/${projectName}/${newKey}`);
-            success('Key renamed successfully');
-        } catch (error) {
-            console.error('Error renaming key:', error);
-            // Here you could add error toast notification
-        }
+    const handleRename = async () => {
+        onRenameBtnClick(key);
     };
 
-    // If data data is not yet loaded, you might want to show a loading state
     if (!data || data.length === 0) {
         return <div>Loading translations...</div>;
     }
@@ -194,10 +181,7 @@ const Edit = (props) => {
                                 <BaseButtons button='delete' onClick={handleDelete}/>
                                 <BaseButtons
                                     button='rename'
-                                    onClick={() => {
-                                        const newKey = prompt('Enter new key name:', watch('key'));
-                                        if (newKey) handleRename(newKey);
-                                    }}
+                                    onClick={handleRename}
                                 />
                             </Form.Group>
                         </div>
@@ -229,7 +213,8 @@ const Edit = (props) => {
                             />
                             <Form.Control
                                 hidden={true}
-                                defaultValue={data[index].id}
+                                name="translation_id"
+                                defaultValue={data[index]?.id}
 
                             />
                             {dirtyFields.translations?.[index]?.value && (

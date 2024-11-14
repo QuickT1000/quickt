@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import Edit from "../forms/Edit";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {TranslationsContext} from "../Translations";
 import {
     createTranslations,
@@ -9,12 +9,21 @@ import {
     updateTranslations
 } from "../../../services/TranslationsService";
 import {paginationDefaults} from "../../../base/pagination/defaults/pagination.defaults";
+import {success} from "../../../base/toast/DwToastHelper";
+import DeleteModal from "../modals/Delete";
+import RenameModal from "../modals/Rename";
 
 const Details = () => {
     const [data, setData] = useState({
         entries: [], pagination: paginationDefaults
     });
     const state = useContext(TranslationsContext);
+    const [showDelete, setShowDelete] = useState(false);
+    const [showRename, setShowRename] = useState(false);
+    const [entriesToDelete, setEntriesToDelete] = useState([]);
+    const [oldKey, setOldKey] = useState('');
+    const [newKey, setNewKey] = useState('');
+    const navigate = useNavigate();
     let { key, project } = useParams();
     const isNewKey = key === 'new';
     const title = isNewKey ? 'New Translations' : 'Edit Translations';
@@ -47,6 +56,7 @@ const Details = () => {
         try {
             const projectName = project;
             await updateTranslations({ projectName, entries });
+            success('Key updated');
         } catch (error) {
             console.error('Error updating translations:', error);
         }
@@ -56,6 +66,7 @@ const Details = () => {
         try {
             const projectName = project;
             await createTranslations({ projectName, entries });
+            success('Key created');
         } catch (error) {
             console.error('Error creating translations:', error);
         }
@@ -65,20 +76,59 @@ const Details = () => {
         try {
             const projectName = project;
             await destroyTranslations({ projectName, entries });
+            success('Key deleted');
         } catch (error) {
             console.error('Error deleting translations:', error);
         }
     };
 
+    const onRename = async (newKey) => {
+        const entriesToRename = data.filter(entry => typeof entry.id !== 'undefined');
+
+        const newEntries = entriesToRename.map(rec => {
+            return {
+                ...rec,
+                key: rec.key = newKey
+            };
+        });
+
+        await onUpdate(newEntries);
+        const combinedNewEntries = getCombinedData(newEntries);
+
+        setData(combinedNewEntries);
+        setShowRename(false);
+        navigate(`/translations/details/${project}/${newKey}`);
+    }
+
+    const onDeleteBtnClick = (entries) => {
+        setShowDelete(!showDelete);
+        setEntriesToDelete(entries)
+    }
+
+    const onRenameBtnClick = (oldKey) => {
+        setNewKey(newKey);
+        setOldKey(oldKey)
+        setShowRename(!showRename);
+    }
+
+    const onClose = () => {
+        setShowRename(false);
+        setShowDelete(false);
+    }
+
     return (
         <div className="m-2">
-                <Edit
-                    title={title}
-                    data={data}
-                    onCreate={onCreate}
-                    onUpdate={onUpdate}
-                    onDelete={onDelete}
-                />
+            <Edit
+                title={title}
+                data={data}
+                onCreate={onCreate}
+                onUpdate={onUpdate}
+                onDelete={onDelete}
+                onDeleteBtnClick={onDeleteBtnClick}
+                onRenameBtnClick={onRenameBtnClick}
+            />
+            <DeleteModal show={showDelete} onClose={onClose} onDelete={onDelete.bind(null, entriesToDelete)}></DeleteModal>
+            <RenameModal oldKey={oldKey} show={showRename} onClose={onClose} onSave={onRename}></RenameModal>
         </div>
     );
 };
