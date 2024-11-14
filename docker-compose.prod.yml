@@ -5,7 +5,7 @@ services:
     image: ${DOCKER_REPOSITORY}
     container_name: "${APPLICATION_NAME}_client"
     labels:
-      traefik.http.routers.quickt-client.rule: "Host('${TRAEFIK_HOST}')"
+      traefik.http.routers.quickt-client.rule: "Host(\"${TRAEFIK_HOST}\")"
       traefik.http.routers.quickt-client.middlewares: "redirect-to-https"
       traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: "https"
       traefik.http.routers.quickt-client.entrypoints: "websecure"
@@ -25,7 +25,7 @@ services:
     container_name: "${APPLICATION_NAME}_server"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.quickt-server.rule: "Host('${TRAEFIK_HOST}')"
+      traefik.http.routers.quickt-server.rule: "Host(\"${TRAEFIK_HOST}\")"
       traefik.http.routers.quickt-server.entrypoints: "websecure"
       traefik.http.routers.quickt-server.tls.certresolver: "letsencrypt"
     ports:
