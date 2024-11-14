@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     Container,
     Nav,
@@ -6,6 +6,7 @@ import {
     NavDropdown
 } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
+import { IoIosArrowDown } from "react-icons/io";
 import "./QuicktHeader.scss";
 
 export const QuicktHeader = (props) => {
@@ -14,9 +15,25 @@ export const QuicktHeader = (props) => {
     const location = useLocation();
     const [openDropdown, setOpenDropdown] = useState(null);
     const [isHovering, setIsHovering] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setOpenDropdown(null);
+                setIsHovering(false);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     const onNavItemSelect = (link) => {
         navigate({ pathname: link });
+        setOpenDropdown(null);
     };
 
     const isActive = (item) => {
@@ -33,7 +50,6 @@ export const QuicktHeader = (props) => {
     };
 
     const handleDropdownLeave = () => {
-        // Kleine Verzögerung beim Schließen
         setTimeout(() => {
             if (!isHovering) {
                 setOpenDropdown(null);
@@ -41,6 +57,13 @@ export const QuicktHeader = (props) => {
         }, 100);
         setIsHovering(false);
     };
+
+    const CustomDropdownTitle = ({ label }) => (
+        <span className="d-flex align-items-center">
+            {label}
+            <IoIosArrowDown className={`ms-1 dropdown-arrow ${openDropdown !== null ? 'rotated' : ''}`} />
+        </span>
+    );
 
     const navigationItems = () => {
         return navigation.map((item, idx) => {
@@ -51,12 +74,13 @@ export const QuicktHeader = (props) => {
                 return (
                     <NavDropdown
                         key={idx}
-                        title={item.label}
+                        title={<CustomDropdownTitle label={item.label} />}
                         id={`nav-dropdown-${idx}`}
                         show={openDropdown === idx}
                         onMouseEnter={() => handleDropdownEnter(idx)}
                         onMouseLeave={handleDropdownLeave}
                         className={active ? 'active' : ''}
+                        ref={dropdownRef}
                     >
                         {item.subItems.map((subItem, subIdx) => (
                             <NavDropdown.Item

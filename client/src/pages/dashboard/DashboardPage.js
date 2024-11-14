@@ -46,12 +46,29 @@ export const DashboardPage = () => {
         }
     };
 
+    const customControlStyles = base => ({
+        height: '31px',
+        minHeight: '31px',
+        display: 'inline-flex',
+        flexGrow: 1,
+        backgroundColor: '#fff',
+        lineHeight: '18px',
+        fontWeight: '400',
+        fontSize: '15px',
+        position: '',
+        border: '1px solid #ccc',
+        borderRadius: '5px',
+        width: "100%",
+        minWidth: "100%",
+    });
+
     const renderProjectsSelect = () => {
         if (!projects.entries) return null;
 
         return (
             <CreatableSelect
                 className="dw-projects-select"
+                styles={{control: customControlStyles}}
                 onChange={onProjectSelect}
                 value={selectedProject ? {
                     label: selectedProject.projectName,
