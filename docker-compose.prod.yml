@@ -5,14 +5,11 @@ services:
     image: ${DOCKER_REPOSITORY}
     container_name: "${APPLICATION_NAME}_client"
     labels:
-      traefik.http.routers.quickt-http.rule: "Host(${TRAEFIK_HOST})"
-      traefik.http.routers.quickt-http.entrypoints: "web"
-      traefik.http.routers.quickt-http.middlewares: "redirect-to-https"
+      traefik.http.routers.quickt-client.rule: "Host('${TRAEFIK_HOST}')"
+      traefik.http.routers.quickt-client.middlewares: "redirect-to-https"
       traefik.http.middlewares.redirect-to-https.redirectscheme.scheme: "https"
-
-      traefik.http.routers.quickt-https.rule: "Host(${TRAEFIK_HOST})"
-      traefik.http.routers.quickt-https.entrypoints: "websecure"
-      traefik.http.routers.quickt-https.tls.certresolver: "letsencrypt"
+      traefik.http.routers.quickt-client.entrypoints: "websecure"
+      traefik.http.routers.quickt-client.tls.certresolver: "letsencrypt"
     working_dir: /app/client
     user: node
     environment:
@@ -28,9 +25,9 @@ services:
     container_name: "${APPLICATION_NAME}_server"
     labels:
       traefik.enable: "true"
-      traefik.http.routers.quickt.rule: "Host(${TRAEFIK_HOST})"
-      traefik.http.routers.quickt.entrypoints: "websecure"
-      traefik.http.routers.quickt.tls.certresolver: "letsencrypt"
+      traefik.http.routers.quickt-server.rule: "Host('${TRAEFIK_HOST}')"
+      traefik.http.routers.quickt-server.entrypoints: "websecure"
+      traefik.http.routers.quickt-server.tls.certresolver: "letsencrypt"
     ports:
       - "3080:3000"
     working_dir: /app/server
