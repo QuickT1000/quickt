@@ -11,11 +11,21 @@ export const UserGuidePage = () => {
 
     const markdown = `## User Guide
 
-- import
-- export
+- First Steps
+- Import
+- Export
 
 
 ---
+
+## First Steps
+
+First of all go to the Projects page and hit the Add Button. Fill in the form. Hint: A Project could be a client for example. 
+![image info](/projects.png)
+
+Now you can go to the translation page and hit the Add button.
+Fill in the form and save. Here you are! Your first translation is ready!
+![image info](/details.png)
 
 ## Import
 
