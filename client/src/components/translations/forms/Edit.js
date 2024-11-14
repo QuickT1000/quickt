@@ -113,7 +113,7 @@ const Edit = (props) => {
             success('Changes saved');
 
             if (isNewEntry) {
-                navigate(`/details/${projectName}/${data.key}`);
+                navigate(`/translations/details/${projectName}/${data.key}`);
             }
         } catch (error) {
             console.error('Error updating translations:', error);
