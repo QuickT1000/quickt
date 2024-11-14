@@ -30,6 +30,7 @@ const Details = () => {
 
     useEffect(() => {
         if (project !== '' && state.selectedProject.projectName !== '') {
+            navigate(`/translations/details/${state.selectedProject.projectName}/${key}`);
             fetchTranslations();
         }
     }, [state.selectedProject, project]);
