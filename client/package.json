@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false craco start --project ../tsconfig.json",
-    "build": "NODE_ENV=production craco build",
+    "build": "NODE_ENV=production craco --config craco.config.prod.js build",
     "test": "craco test",
     "eject": "craco eject"
   },
