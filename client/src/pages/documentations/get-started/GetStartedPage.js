@@ -35,7 +35,6 @@ Desktop:~/projects/quickt$ docker-compose up
     return (
         <div className={'get-started-page'}>
 
-
             <QuicktHeader navigation={getMainNavigation()}>
                 <div id="logo"><img src="/logo.png" alt="quickt"/>quickt</div>
                 <div id="extras" className="dw-settings d-flex"><a target="_blank"
@@ -44,7 +43,7 @@ Desktop:~/projects/quickt$ docker-compose up
                     alt="coffee"/></a></div>
             </QuicktHeader>
 
-            <div className={'container'}>
+            <div className={'container my-3'}>
                 <section>
                     <Markdown
                         children={markdown}

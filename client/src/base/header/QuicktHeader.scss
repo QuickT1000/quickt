@@ -20,6 +20,10 @@
         min-height: 100%;
     }
 
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
     &__extra {
         display: flex;
         width: 120px;
@@ -31,6 +35,7 @@
         position: relative;
         display: flex;
         align-items: center;
+        margin-right: 7px;
 
         &.active {
             color: #6e3cc3 !important;

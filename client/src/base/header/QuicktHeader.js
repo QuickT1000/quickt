@@ -8,6 +8,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import { IoIosArrowDown } from "react-icons/io";
 import "./QuicktHeader.scss";
+import {IoMenu} from "react-icons/io5";
 
 export const QuicktHeader = (props) => {
     const { navigation, children } = props;
@@ -123,7 +124,7 @@ export const QuicktHeader = (props) => {
                     <Navbar.Brand className='quickt__header__brand' href="/">
                         {getChildren('logo')}
                     </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="navbarScroll" />
+                    <Navbar.Toggle aria-controls="navbarScroll"> <IoMenu /> </Navbar.Toggle>
                     <Navbar.Collapse id="navbarScroll">
                         <Nav className="me-auto" navbarScroll>
                             {navigationItems()}

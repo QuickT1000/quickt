@@ -13,10 +13,10 @@
         "description": "Retrieves a list of translations based on search criteria",
         "parameters": [
           {
-            "name": "client",
+            "name": "projectName",
             "in": "query",
             "type": "string",
-            "description": "Client identifier",
+            "description": "Project identifier",
             "required": true
           },
           {
@@ -82,65 +82,6 @@
         }
       }
     },
-    "/findOne": {
-      "get": {
-        "summary": "Find a translation by ID",
-        "description": "Retrieves a specific translation by its ID",
-        "parameters": [
-          {
-            "name": "client",
-            "in": "query",
-            "type": "string",
-            "description": "Client identifier",
-            "required": true
-          },
-          {
-            "name": "id",
-            "in": "query",
-            "type": "integer",
-            "description": "Translation ID",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A single translation",
-            "schema": { "$ref": "#/definitions/Translation" }
-          }
-        }
-      }
-    },
-    "/find": {
-      "get": {
-        "summary": "Find translations by key",
-        "description": "Retrieves translations based on a specific key",
-        "parameters": [
-          {
-            "name": "client",
-            "in": "query",
-            "type": "string",
-            "description": "Client identifier",
-            "required": true
-          },
-          {
-            "name": "key",
-            "in": "query",
-            "type": "string",
-            "description": "Translation key to search",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of translations",
-            "schema": {
-              "type": "array",
-              "items": { "$ref": "#/definitions/Translation" }
-            }
-          }
-        }
-      }
-    },
     "/create": {
       "post": {
         "summary": "Create a new translation",
@@ -194,7 +135,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "client": { "type": "string", "description": "Client identifier", "required": true },
+                "projectName": { "type": "string", "description": "Project identifier", "required": true },
                 "id": { "type": "integer", "description": "Translation ID", "required": true }
               }
             },
@@ -220,7 +161,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "client": { "type": "string", "description": "Client identifier", "required": true },
+                "projectName": { "type": "string", "description": "Project identifier", "required": true },
                 "data": {
                   "type": "object",
                   "additionalProperties": {
@@ -260,7 +201,7 @@
       "type": "object",
       "properties": {
         "id": { "type": "integer", "description": "Unique identifier for the translation" },
-        "client": { "type": "string", "description": "Client identifier" },
+        "projectName": { "type": "string", "description": "Project identifier" },
         "key": { "type": "string", "description": "Translation key" },
         "value": { "type": "string", "description": "Translation value" },
         "country": { "type": "string", "description": "Country code" },

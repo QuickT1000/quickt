@@ -29,8 +29,7 @@ export const UserGuidePage = () => {
 `;
 
     return (
-        <div className={'get-started-page'}>
-
+        <div className={'user-guide-page'}>
 
             <QuicktHeader navigation={getMainNavigation()}>
                 <div id="logo"><img src="/logo.png" alt="quickt"/>quickt</div>
@@ -40,7 +39,7 @@ export const UserGuidePage = () => {
                     alt="coffee"/></a></div>
             </QuicktHeader>
 
-            <div className={'container'}>
+            <div className={'container my-3'}>
                 <section>
                     <Markdown
                         children={markdown}
