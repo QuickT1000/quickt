@@ -9,7 +9,7 @@ import {
     updateTranslations
 } from "../../../services/TranslationsService";
 import {paginationDefaults} from "../../../base/pagination/defaults/pagination.defaults";
-import {success} from "../../../base/toast/DwToastHelper";
+import {danger, success} from "../../../base/toast/DwToastHelper";
 import DeleteModal from "../modals/Delete";
 import RenameModal from "../modals/Rename";
 
@@ -24,7 +24,7 @@ const Details = () => {
     const [oldKey, setOldKey] = useState('');
     const [newKey, setNewKey] = useState('');
     const navigate = useNavigate();
-    let { key, project } = useParams();
+    let {key, project} = useParams();
     const isNewKey = key === 'new';
     const title = isNewKey ? 'New Translations' : 'Edit Translations';
 
@@ -41,7 +41,7 @@ const Details = () => {
             const response = await readTranslations({projectName, key, pagination});
             setData(getCombinedData(response.entries));
         } catch (error) {
-            console.error('Error fetching translations:', error);
+            danger(error);
         }
     };
 
@@ -49,36 +49,38 @@ const Details = () => {
         state.selectedProject.locales.map(locale => {
             const [language, country] = [locale.slice(0, 2), locale.slice(3, 5)];
             return entries.find(entry => entry.country === country && entry.language === language) ||
-                { key: 'new', value: '', country, language };
+                {key: 'new', value: '', country, language};
         });
 
     const onUpdate = async (entries) => {
         try {
             const projectName = project;
-            await updateTranslations({ projectName, entries });
+            await updateTranslations({projectName, entries});
             success('Key updated');
         } catch (error) {
-            console.error('Error updating translations:', error);
+            danger(error);
         }
     };
 
     const onCreate = async (entries) => {
         try {
             const projectName = project;
-            await createTranslations({ projectName, entries });
+            await createTranslations({projectName, entries});
             success('Key created');
         } catch (error) {
-            console.error('Error creating translations:', error);
+            danger(error);
         }
     };
 
     const onDelete = async (entries) => {
         try {
             const projectName = project;
-            await destroyTranslations({ projectName, entries });
+            await destroyTranslations({projectName, entries});
+            setShowDelete(false);
+            navigate(`/translations`);
             success('Key deleted');
         } catch (error) {
-            console.error('Error deleting translations:', error);
+            danger(error);
         }
     };
 
@@ -127,7 +129,8 @@ const Details = () => {
                 onDeleteBtnClick={onDeleteBtnClick}
                 onRenameBtnClick={onRenameBtnClick}
             />
-            <DeleteModal show={showDelete} onClose={onClose} onDelete={onDelete.bind(null, entriesToDelete)}></DeleteModal>
+            <DeleteModal show={showDelete} onClose={onClose}
+                         onDelete={onDelete.bind(null, entriesToDelete)}></DeleteModal>
             <RenameModal oldKey={oldKey} show={showRename} onClose={onClose} onSave={onRename}></RenameModal>
         </div>
     );

@@ -40,14 +40,16 @@ const Edit = (props) => {
     // Update form when data becomes available
     useEffect(() => {
         if (data && data.length > 0) {
-            const formattedTranslations = data.map(item => ({
-                id: item.id,
-                translation_id: item.id,
-                language: item.language,
-                country: item.country,
-                value: item.value || '',
-                originalValue: item.value || ''
-            }));
+            const formattedTranslations = data.map(item => {
+                return ({
+                    id: item.id,
+                    translation_id: item.id,
+                    language: item.language,
+                    country: item.country,
+                    value: item.value || '',
+                    originalValue: item.value || ''
+                });
+            });
 
             reset({
                 key: isNewEntry ? '' : key,
@@ -126,19 +128,19 @@ const Edit = (props) => {
     const handleDelete = async () => {
         const currentKey = watch('key');
 
-        const translationsToDelete = fields.filter(field => {
-            if (typeof field.translation_id !== 'undefined') {
-                return ({
-                    id: field.translation_id,
-                    key: currentKey,
-                    country: field.country,
-                    language: field.language
-                });
-            }
+        const translationsToDelete = fields.filter(field => (typeof field.translation_id !== 'undefined'));
+
+        const responseToDelete = translationsToDelete.map(rec => {
+            return ({
+                id: rec.translation_id,
+                key: currentKey,
+                country: rec.country,
+                language: rec.language
+            });
         });
 
         try {
-            await onDeleteBtnClick(translationsToDelete);
+            await onDeleteBtnClick(responseToDelete);
         } catch (error) {
             console.error('Error deleting translations:', error);
             // Here you could add error toast notification
