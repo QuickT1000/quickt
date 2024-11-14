@@ -1,9 +1,12 @@
 const path = require('path');
 
+// React Refresh Plugin für HMR in der Entwicklung
+const CracoReactRefreshPlugin = require('craco-plugin-react-refresh');
+
 module.exports = {
   webpack: {
     output: {
-      path: __dirname + '/dist',
+      path: path.resolve(__dirname, 'dist'), // Pfad besser mit `path.resolve`
       filename: 'bundle.js',
       publicPath: '/',
     },
@@ -12,5 +15,9 @@ module.exports = {
       '@services': path.resolve(process.cwd(), './src/services'),
     },
   },
+  plugins: [
+    ...(process.env.NODE_ENV === 'development'
+        ? [{ plugin: CracoReactRefreshPlugin }]
+        : []),
+  ],
 };
-

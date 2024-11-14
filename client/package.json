@@ -27,7 +27,7 @@
     "swagger-ui-react": "^5.17.14"
   },
   "scripts": {
-    "start": "NODE_ENV=production GENERATE_SOURCEMAP=false craco start --project ../tsconfig.json",
+    "start": "GENERATE_SOURCEMAP=false craco start --project ../tsconfig.json",
     "build": "NODE_ENV=production craco build",
     "test": "craco test",
     "eject": "craco eject"
