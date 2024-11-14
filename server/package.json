@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./dist/src/server.js",
+    "start": "NODE_ENV=production node ./dist/src/server.js",
     "start:dev": "./node_modules/nodemon/bin/nodemon.js --project ./tsconfig.json ",
     "start:migration": "node ./dist/src/migration/migration.js",
     "build": "tsc -p tsconfig.build.json",
