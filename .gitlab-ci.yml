@@ -54,7 +54,7 @@ prod:
     - main
   environment:
     name: production
-    url: https://quickt.de
+    url: https://demo.quickt.de
 
 cleanup:
   stage: cleanup
