@@ -8,15 +8,8 @@ import {TranslationsController} from "@controller/translations.controller";
 import {ConfigurationsController} from "@controller/configurations.controller";
 import {ProjectsController} from "@controller/projects.controller";
 import {ChartsController} from "@controller/charts.controller";
-
-const errorMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
-    console.error(err);
-    res.status(500).json({
-        code: 'error',
-        reason: err.toString()
-    });
-};
-
+import {errorMiddleware} from "./middlewares/error.middleware";
+import {L10nController} from "@controller/l10n.controller";
 
 export class Server {
     server: any;
@@ -39,6 +32,7 @@ export class Server {
         new IndexController(this.server);
         new ProjectsController(this.server);
         new TranslationsController(this.server);
+        new L10nController(this.server);
         new ConfigurationsController(this.server);
         new ChartsController(this.server);
 

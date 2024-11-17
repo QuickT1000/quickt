@@ -61,23 +61,7 @@
         "responses": {
           "200": {
             "description": "List of translations based on search criteria",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "entries": {
-                  "type": "array",
-                  "items": { "$ref": "#/definitions/Translation" }
-                },
-                "pagination": {
-                  "type": "object",
-                  "properties": {
-                    "total": { "type": "integer" },
-                    "pageIndex": { "type": "integer" },
-                    "pageSize": { "type": "integer" }
-                  }
-                }
-              }
-            }
+            "schema": { "$ref": "#/definitions/TranslationsResponse" }
           }
         }
       }
@@ -90,7 +74,7 @@
           {
             "name": "body",
             "in": "body",
-            "schema": { "$ref": "#/definitions/Translation" },
+            "schema": { "$ref": "#/definitions/CreateTranslationRequest" },
             "description": "Translation data",
             "required": true
           }
@@ -98,7 +82,7 @@
         "responses": {
           "201": {
             "description": "Translation created successfully",
-            "schema": { "$ref": "#/definitions/Translation" }
+            "schema": { "$ref": "#/definitions/TranslationsResponse" }
           }
         }
       }
@@ -111,7 +95,7 @@
           {
             "name": "body",
             "in": "body",
-            "schema": { "$ref": "#/definitions/Translation" },
+            "schema": { "$ref": "#/definitions/UpdateTranslationRequest" },
             "description": "Updated translation data",
             "required": true
           }
@@ -119,7 +103,7 @@
         "responses": {
           "200": {
             "description": "Translation updated successfully",
-            "schema": { "$ref": "#/definitions/Translation" }
+            "schema": { "$ref": "#/definitions/TranslationsResponse" }
           }
         }
       }
@@ -132,13 +116,7 @@
           {
             "name": "body",
             "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "projectName": { "type": "string", "description": "Project identifier", "required": true },
-                "id": { "type": "integer", "description": "Translation ID", "required": true }
-              }
-            },
+            "schema": { "$ref": "#/definitions/DestroyTranslationsRequest" },
             "description": "Deletion parameters",
             "required": true
           }
@@ -161,14 +139,18 @@
             "schema": {
               "type": "object",
               "properties": {
-                "projectName": { "type": "string", "description": "Project identifier", "required": true },
+                "projectName": {
+                  "type": "string",
+                  "description": "Project identifier",
+                  "required": true
+                },
                 "data": {
                   "type": "object",
                   "additionalProperties": {
                     "type": "object",
-                    "properties": {
-                      "key": { "type": "string" },
-                      "value": { "type": "string" }
+                    "additionalProperties": {
+                      "type": "string",
+                      "description": "Translation key (dot notation), e.g. 'dummy.feature.login'."
                     }
                   }
                 }
@@ -187,7 +169,7 @@
                 "success": { "type": "boolean" },
                 "data": {
                   "type": "array",
-                  "items": { "$ref": "#/definitions/Translation" }
+                  "items": { "$ref": "#/definitions/TranslationsResponse" }
                 }
               }
             }
@@ -197,17 +179,101 @@
     }
   },
   "definitions": {
-    "Translation": {
+    "CreateTranslationRequest": {
       "type": "object",
       "properties": {
-        "id": { "type": "integer", "description": "Unique identifier for the translation" },
         "projectName": { "type": "string", "description": "Project identifier" },
-        "key": { "type": "string", "description": "Translation key" },
-        "value": { "type": "string", "description": "Translation value" },
-        "country": { "type": "string", "description": "Country code" },
-        "language": { "type": "string", "description": "Language code" },
-        "created_at": { "type": "string", "format": "date-time", "description": "Creation timestamp" },
-        "updated_at": { "type": "string", "format": "date-time", "description": "Last update timestamp" }
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": { "type": "string", "description": "Translation key" },
+              "value": { "type": "string", "description": "Translation value" },
+              "country": { "type": "string", "description": "Country code" },
+              "language": { "type": "string", "description": "Language code" }
+            }
+          }
+        }
+      }
+    },
+    "UpdateTranslationRequest": {
+      "type": "object",
+      "properties": {
+        "projectName": { "type": "string", "description": "Project identifier" },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "number", "description": "Translation id" },
+              "key": { "type": "string", "description": "Translation key" },
+              "value": { "type": "string", "description": "Translation value" },
+              "country": { "type": "string", "description": "Country code" },
+              "language": { "type": "string", "description": "Language code" }
+            }
+          }
+        }
+      }
+    },
+    "DestroyTranslationsRequest": {
+      "type": "object",
+      "properties": {
+        "projectName": { "type": "string", "description": "Project identifier" },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "number", "description": "Translation id" },
+              "key": { "type": "string", "description": "Translation key" },
+              "value": { "type": "string", "description": "Translation value" },
+              "country": { "type": "string", "description": "Country code" },
+              "language": { "type": "string", "description": "Language code" }
+            }
+          }
+        }
+      }
+    },
+    "TranslationsResponse": {
+      "type": "object",
+      "properties": {
+        "pagination": { "$ref": "#/definitions/Pagination" },
+        "entries": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "number", "description": "Translation id" },
+              "key": { "type": "string", "description": "Translation key" },
+              "value": { "type": "string", "description": "Translation value" },
+              "country": { "type": "string", "description": "Country code" },
+              "language": { "type": "string", "description": "Language code" }
+            }
+          }
+        }
+      }
+    },
+    "Pagination": {
+      "type": "object",
+      "properties": {
+        "pagination": {
+          "type": "object",
+          "properties": {
+            "total": {
+              "type": "number",
+              "description": "Pagination total"
+            },
+            "pageIndex": {
+              "type": "number",
+              "description": "Pagination pageIndex"
+            },
+            "pageSize": {
+              "type": "string",
+              "description": "Pagination pageSize"
+            }
+          }
+        }
       }
     }
   }

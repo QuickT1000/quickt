@@ -29,7 +29,7 @@ services:
     working_dir: /app
     user: node
     ports:
-      - "3001:3001"
+      - "3001:3000"
     networks:
       - default
     volumes:

@@ -1,9 +1,9 @@
-export class SearchTranslationsPresenter {
+export class ImportTranslationsPresenter {
 
   constructor(private req, private res) {}
 
   present(data) {
-    this.res.status(200).json(data);
+    this.res.status(200).json({ success: true, data });
   }
 
   presentError(error) {

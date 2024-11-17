@@ -1,4 +1,4 @@
-export class FindOneTranslationsPresenter {
+export class ReadTranslationsPresenter {
 
   constructor(private req, private res) {}
 
