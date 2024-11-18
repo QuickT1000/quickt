@@ -17,7 +17,7 @@ export class UpdateProjectsInteractor {
 
   async execute() {
     try {
-      const configurations = await this.configurationsRepository.read(this.body.projectName);
+      const configurations = await this.configurationsRepository.read(this.body.projectId);
       const configLocales = configurations.locales;
       const bodyLocales = this.body.locales;
 

@@ -72,25 +72,25 @@ export const DashboardPage = () => {
                 onChange={onProjectSelect}
                 value={selectedProject ? {
                     label: selectedProject.projectName,
-                    value: selectedProject.projectName
+                    value: selectedProject.projectId
                 } : null}
                 options={projects.entries.map(project => ({
                     label: project.projectName,
-                    value: project.projectName
+                    value: project.projectId
                 }))}
             />
         );
     };
 
     useEffect(() => {
-        fetchCharts(selectedProject.projectName, selectedProject.locales)
+        fetchCharts(selectedProject.projectId, selectedProject.locales)
     }, [selectedProject]);
 
 
-    const fetchCharts = async (projectName, locales) => {
-        if (projectName !== '') {
+    const fetchCharts = async (projectId, locales) => {
+        if (projectId !== '') {
             try {
-                const response = await readCharts(projectName, locales); // Wichtiger Fix: await hinzugefügt
+                const response = await readCharts(projectId, locales); // Wichtiger Fix: await hinzugefügt
                 setData(response);
             } catch (error) {
                 console.error('Error fetching chart data:', error);
@@ -100,7 +100,7 @@ export const DashboardPage = () => {
 
 
     const onProjectSelect = (e) => {
-        const selected = projects.entries.find(project => project.projectName === e.value);
+        const selected = projects.entries.find(project => project.projectId === e.value);
         setSelectedProject(selected);
     };
 

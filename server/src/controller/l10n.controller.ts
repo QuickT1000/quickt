@@ -12,7 +12,7 @@ export class L10nController {
     }
 
     async readAction(req: any, res: any, next: any) {
-        const repository = new L10nRepository(req.query.projectName);
+        const repository = new L10nRepository(req.query.projectId);
         const presenter = new ReadL10nPresenter(req, res);
         const interactor = new ReadL10nInteractor(repository, req.query, presenter);
         await interactor.execute();

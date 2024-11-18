@@ -1,7 +1,7 @@
 import joi from 'joi';
 
 export const ReadL10nValidation = joi.object({
-    projectName: joi.string().required(),
+    projectId: joi.string().required(),
     key: joi.string().allow(''),
     value: joi.string().allow(''),
     country: joi.string().allow(''),

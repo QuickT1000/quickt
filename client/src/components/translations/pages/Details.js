@@ -29,8 +29,8 @@ const Details = () => {
     const title = isNewKey ? 'New Translations' : 'Edit Translations';
 
     useEffect(() => {
-        if (project !== '' && state.selectedProject.projectName !== '') {
-            navigate(`/translations/details/${state.selectedProject.projectName}/${key}`);
+        if (project !== '' && state.selectedProject.projectId !== '') {
+            navigate(`/translations/details/${state.selectedProject.projectId}/${key}`);
             fetchTranslations();
         }
     }, [state.selectedProject, project]);
@@ -38,8 +38,8 @@ const Details = () => {
     const fetchTranslations = async () => {
         try {
             const pagination = {pageSize: 1000, pageIndex: 1};
-            const projectName = project;
-            const response = await readTranslations({projectName, key, pagination});
+            const projectId = project;
+            const response = await readTranslations({projectId, key, pagination});
             setData(getCombinedData(response.entries));
         } catch (error) {
             danger(error);
@@ -55,8 +55,8 @@ const Details = () => {
 
     const onUpdate = async (entries) => {
         try {
-            const projectName = project;
-            await updateTranslations({projectName, entries});
+            const projectId = project;
+            await updateTranslations({projectId, entries});
             success('Key updated');
         } catch (error) {
             danger(error);
@@ -65,8 +65,8 @@ const Details = () => {
 
     const onCreate = async (entries) => {
         try {
-            const projectName = project;
-            await createTranslations({projectName, entries});
+            const projectId = project;
+            await createTranslations({projectId, entries});
             success('Key created');
         } catch (error) {
             danger(error);
@@ -75,8 +75,8 @@ const Details = () => {
 
     const onDelete = async (entries) => {
         try {
-            const projectName = project;
-            await destroyTranslations({projectName, entries});
+            const projectId = project;
+            await destroyTranslations({projectId, entries});
             setShowDelete(false);
             navigate(`/translations`);
             success('Key deleted');

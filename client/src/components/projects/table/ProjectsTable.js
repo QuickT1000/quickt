@@ -44,17 +44,24 @@ const ProjectsTable = (props) => {
                 onPaginationChange={onPaginationChange}
             >
                 <BaseColumn
-                    title='Project'
+                    title='Project Name'
                     dataIndex={'projectName'}
                     fieldType='string'
                     enableFilter={true}
-                    width={20}
+                    width={15}
+                />
+                <BaseColumn
+                    title='Project Id'
+                    dataIndex={'projectId'}
+                    fieldType='string'
+                    enableFilter={true}
+                    width={15}
                 />
                 <BaseColumn
                     title='Default Locale'
                     dataIndex={'defaultLocale'}
                     fieldType='string'
-                    width={20}
+                    width={15}
                     enableFilter={false}
                 />
                 <BaseColumn

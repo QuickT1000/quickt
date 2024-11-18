@@ -5,9 +5,7 @@ moment.locale('de');
 
 export class ProjectsRepository {
 
-  client: string;
-
-  public async read({ pageSize = 10, pageIndex = 1, projectName = '' }): Promise<any> {
+  public async read({ pageSize = 10, pageIndex = 1, projectId = '' }): Promise<any> {
     const offset = (pageIndex - 1) * pageSize;
 
     // Abfrage für die Daten mit Pagination und Schema-BaseFilter
@@ -21,7 +19,7 @@ export class ProjectsRepository {
     where
       c.relkind = 'r'
       and c.relname = 'translations'
-      ${projectName ? `and n.nspname like '%${projectName}%'` : ''}
+      ${projectId ? `and n.nspname like '%${projectId}%'` : ''}
     limit ${pageSize}
     offset ${offset};
   `;
@@ -37,7 +35,7 @@ export class ProjectsRepository {
     where
       c.relkind = 'r'
       and c.relname = 'translations'
-      ${projectName ? `and n.nspname like '%${projectName}%'` : ''};
+      ${projectId ? `and n.nspname like '%${projectId}%'` : ''};
   `;
 
     // Führe beide Abfragen aus
@@ -57,14 +55,14 @@ export class ProjectsRepository {
 
   // Methode zum Erstellen eines neuen Schemas mit den Tabellen "translations" und "configurations"
   public async create(body: any): Promise<any> {
-    const { projectName } = body;
+    const { projectId } = body;
 
     let queryString = `
       -- Neues Schema erstellen
-      CREATE SCHEMA IF NOT EXISTS "${projectName}";
+      CREATE SCHEMA IF NOT EXISTS "${projectId}";
       
       -- Tabelle "translations" erstellen
-      CREATE TABLE IF NOT EXISTS "${projectName}".translations (
+      CREATE TABLE IF NOT EXISTS "${projectId}".translations (
         id SERIAL PRIMARY KEY,
         key VARCHAR NOT NULL,
         value VARCHAR NOT NULL,
@@ -74,15 +72,16 @@ export class ProjectsRepository {
       );
 
       -- Indizes auf "key", "country" und "language" setzen
-      CREATE INDEX IF NOT EXISTS idx_key ON "${projectName}".translations (key);
-      CREATE INDEX IF NOT EXISTS idx_country ON "${projectName}".translations (country);
-      CREATE INDEX IF NOT EXISTS idx_language ON "${projectName}".translations (language);
+      CREATE INDEX IF NOT EXISTS idx_key ON "${projectId}".translations (key);
+      CREATE INDEX IF NOT EXISTS idx_country ON "${projectId}".translations (country);
+      CREATE INDEX IF NOT EXISTS idx_language ON "${projectId}".translations (language);
 
       -- Tabelle "configurations" erstellen
-      CREATE TABLE IF NOT EXISTS "${projectName}".configurations (
+      CREATE TABLE IF NOT EXISTS "${projectId}".configurations (
         id SERIAL PRIMARY KEY,
         locales JSONB NOT NULL,
         "defaultLocale" VARCHAR NOT NULL,
+        "projectName" VARCHAR NOT NULL,
         updated_at TIMESTAMPTZ DEFAULT now()
       );
     `;
@@ -96,9 +95,9 @@ export class ProjectsRepository {
      // update not necessary yet! only projectName could be updated.
   }
 
-  public async delete(projectName: string): Promise<any> {
+  public async delete(projectId: string): Promise<any> {
     try {
-      await databaseAdapter.query(`DROP SCHEMA IF EXISTS "${projectName}" CASCADE;`);
+      await databaseAdapter.query(`DROP SCHEMA IF EXISTS "${projectId}" CASCADE;`);
       return { deleted: true };
     } catch (e) {
       console.log(e);

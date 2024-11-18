@@ -24,7 +24,7 @@ export class ReadChartsInteractor {
     try {
       const response = this.body.locales.map(async (locale) => {
         return await this.translationsRepository.findByProjectNameAndCountryAndLanguage(
-            this.body.projectName,
+            this.body.projectId,
             getCountryByLocale(locale),
             getLanguageByLocale(locale)
         );

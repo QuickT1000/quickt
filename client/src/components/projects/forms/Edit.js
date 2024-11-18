@@ -10,13 +10,14 @@ import {paginationDefaults} from "../../../base/pagination/defaults/pagination.d
 
 const Edit = forwardRef((props, ref) => {
     const {data, title, onUpdate, onCreate} = props;
-    const {projectName} = useParams();
-    const isNewEntry = projectName === 'new';
+    const {projectId} = useParams();
+    const isNewEntry = projectId === 'new';
     const navigate = useNavigate();
     const [options, setOptions] = useState([]);
     const { control, handleSubmit, setValue, reset, getValues } = useForm({
         defaultValues: {
-            projectName: isNewEntry ? '' : projectName,
+            projectName: data?.projectName || '',
+            projectId: isNewEntry ? '' : projectId,
             defaultLocale: data?.defaultLocale || '',
             locales: data?.locales || [],
         }
@@ -41,7 +42,8 @@ const Edit = forwardRef((props, ref) => {
 
     useEffect(() => {
         reset({
-            projectName: isNewEntry ? '' : projectName,
+            projectName: data?.projectName || '',
+            projectId: isNewEntry ? '' : projectId,
             defaultLocale: data?.defaultLocale || '',
             locales: data?.locales || [],
         });
@@ -62,6 +64,10 @@ const Edit = forwardRef((props, ref) => {
 
     const onProjectNameChange = (e) => {
         setValue('projectName', e.target.value);
+    };
+
+    const onProjectIdChange = (e) => {
+        setValue('projectId', e.target.value);
     };
 
     const selectedLocales = getValues("locales");
@@ -122,6 +128,22 @@ const Edit = forwardRef((props, ref) => {
                 id="projectName"
                 {...control.register("projectName", {
                     onChange: onProjectNameChange,
+                })}
+            />
+
+            <Form.Label className="mt-3 required" htmlFor="projectId">
+                Project Id
+            </Form.Label>
+            <DwTooltip
+                title="Project Id"
+                placement="right"
+                message="Project id is a unique identifier within your project. You can choose your own id or the project name will be converted to an id."
+            />
+            <FormControl
+                placeholder="Enter project id"
+                id="projectId"
+                {...control.register("projectId", {
+                    onChange: onProjectIdChange,
                 })}
             />
 

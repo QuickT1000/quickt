@@ -3,24 +3,25 @@ import Edit from "../forms/Edit";
 import { useParams } from "react-router-dom";
 import {createProjects, readProjects, updateProjects} from "../../../services/ProjectsService";
 import {paginationDefaults} from "../../../base/pagination/defaults/pagination.defaults";
+import {success} from "../../../base/toast/DwToastHelper";
 
 const Details = () => {
     const [data, setData] = useState({
-        entries: [{projectName: '', defaultLocale: '', locales: []}],
+        entries: [{projectName: '', projectId: '', defaultLocale: '', locales: []}],
         pagination: paginationDefaults});
 
-    let { projectName } = useParams();
-    const isNewProject = projectName === 'new';
+    let { projectId } = useParams();
+    const isNewProject = projectId === 'new';
     const title = isNewProject ? 'New Project' : 'Edit Project';
 
 
     useEffect(() => {
         fetchProjects(paginationDefaults);
-    }, [projectName]);
+    }, [projectId]);
 
     const fetchProjects = async (pagination) => {
         try {
-                const response = await readProjects({projectName, pagination});
+                const response = await readProjects({projectId, pagination});
                 setData(response);
         } catch (error) {
             console.error('Error fetching translations:', error);
@@ -30,6 +31,7 @@ const Details = () => {
     const onUpdate = async (project) => {
         try {
             await updateProjects(project);
+            success('Project updated');
         } catch (error) {
             console.error('Error updating translations:', error);
         }
@@ -38,6 +40,7 @@ const Details = () => {
     const onCreate = async (project) => {
         try {
             await createProjects(project);
+            success('Project created');
         } catch (error) {
             console.error('Error creating translations:', error);
         }

@@ -16,20 +16,27 @@ const Overview = () => {
     const [enableImportModal, setEnableImportModal] = useState(false);
     const [enableExportModal, setEnableExportModal] = useState(false);
     const [selectedRows, setSelectedRows] = useState(false);
+    const [filters, setFilters] = useState([]);
     const [data, setData] = useState({
         entries: [], pagination: paginationDefaults
     });
 
     useEffect(() => {
-        if (state.selectedProject.projectName !== '') {
+        if (state.selectedProject.projectId !== '') {
             fetchTranslations(paginationDefaults);
         }
     }, [state.selectedProject]);
 
     const fetchTranslations = async (pagination) => {
         try {
-            const projectName = state.selectedProject.projectName;
-            const response = await readTranslations({projectName, pagination});
+            const projectId = state.selectedProject.projectId;
+
+            const filterParams = filters?.reduce((acc, filter) => {
+                acc[filter.key] = filter.value;
+                return acc;
+            }, {});
+
+            const response = await readTranslations({projectId, pagination, ...filterParams});
             setData(response);
         } catch (error) {
             console.error('Error fetching translations:', error);
@@ -38,11 +45,11 @@ const Overview = () => {
 
     const onEditBtnClick = async (selectedRow) => {
         setSelectedRows(selectedRows);
-        navigate(`/translations/details/${state.selectedProject.projectName}/${selectedRow.key}`);
+        navigate(`/translations/details/${state.selectedProject.projectId}/${selectedRow.key}`);
     }
 
     const onAddBtnClick = async (selectedRow) => {
-        navigate(`/translations/details/${state.selectedProject.projectName}/new`);
+        navigate(`/translations/details/${state.selectedProject.projectId}/new`);
     }
 
     const onDeleteBtnClick = (rows) => {
@@ -52,8 +59,8 @@ const Overview = () => {
 
     const onDelete = async () => {
         try {
-            const projectName = state.selectedProject.projectName;
-            await destroyTranslations({ projectName, entries: selectedRows });
+            const projectId = state.selectedProject.projectId;
+            await destroyTranslations({ projectId, entries: selectedRows });
             await fetchTranslations(data.pagination);
             setShow(!show);
         } catch (error) {
@@ -65,17 +72,20 @@ const Overview = () => {
         setShow(!show);
     }
 
-    const onChange = async (filters) => {
-        const filterParams = filters.reduce((acc, filter) => {
+    const onChange = async (tableFilters) => {
+        console.log(tableFilters, ' <------ tableFilsters ------ ');
+
+        setFilters(tableFilters)
+        const filterParams = tableFilters.reduce((acc, filter) => {
             acc[filter.key] = filter.value;
             return acc;
         }, {});
 
-        const projectName = state.selectedProject.projectName;
+        const projectId = state.selectedProject.projectId;
 
         try {
             const response = await readTranslations({
-                projectName,
+                projectId,
                 pagination: data.pagination,
                 ...filterParams
             });
@@ -88,7 +98,7 @@ const Overview = () => {
 
     const onImportSuccess = async () => {
         const response = await readTranslations({
-            projectName: state.selectedProject.projectName,
+            projectId: state.selectedProject.projectId,
             pagination: paginationDefaults,
         });
         setData(response);
@@ -137,7 +147,7 @@ const Overview = () => {
                 data={selectedRows}/>
             <Import
                 show={enableImportModal}
-                projectName={state.selectedProject.projectName}
+                projectId={state.selectedProject.projectId}
                 onClose={setEnableImportModal}
                 onSuccess={onImportSuccess}
             />

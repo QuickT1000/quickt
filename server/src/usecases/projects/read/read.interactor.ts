@@ -20,7 +20,8 @@ export class ReadProjectsInteractor {
                 const configuration = await this.configurationsRepository.read(schema.nspname);
 
                 return {
-                    projectName: schema.nspname,
+                    projectName: configuration.projectName || '',
+                    projectId: schema.nspname,
                     defaultLocale: configuration.defaultLocale || '',
                     locales: configuration.locales
                 }

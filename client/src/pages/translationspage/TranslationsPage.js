@@ -46,7 +46,7 @@ const TranslationsPage = () => {
     };
 
     const onProjectSelect = (e) => {
-        const selected = projects.entries.find(project => project.projectName === e.value);
+        const selected = projects.entries.find(project => project.projectId === e.value);
         setSelectedProject(selected);
     };
 
@@ -76,11 +76,11 @@ const TranslationsPage = () => {
                 onChange={onProjectSelect}
                 value={selectedProject ? {
                     label: selectedProject.projectName,
-                    value: selectedProject.projectName
+                    value: selectedProject.projectId
                 } : null}
                 options={projects.entries.map(project => ({
                     label: project.projectName,
-                    value: project.projectName
+                    value: project.projectId
                 }))}
             />
         );

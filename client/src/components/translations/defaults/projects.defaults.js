@@ -2,6 +2,7 @@ import {paginationDefaults} from "../../../base/pagination/defaults/pagination.d
 
 export const projectEntryDefault = {
     projectName: '',
+    projectId: '',
     default: '',
     locales: []
 }

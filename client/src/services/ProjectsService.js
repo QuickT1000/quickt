@@ -5,10 +5,11 @@ export async function readProjects(props) {
     const {
         projectName = '',
         defaultLocale = '',
+        projectId = '',
         pagination = paginationDefaults
     } = props;
 
-    let params = `?projectName=${projectName}&defaultLocale=${defaultLocale}`;
+    let params = `?projectName=${projectName}&defaultLocale=${defaultLocale}&projectId=${projectId}`;
 
     if (pagination) {
         params += `&pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}`

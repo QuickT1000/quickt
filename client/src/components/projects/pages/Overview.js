@@ -11,7 +11,7 @@ const Overview = () => {
     const [show, setShow] = useState(false);
     const [selectedRows, setSelectedRows] = useState(false);
     const [data, setData] = useState({
-        entries: [{projectName: '', defaultLocale: '', locales: []}],
+        entries: [{projectName: '', projectId: '', defaultLocale: '', locales: []}],
         pagination: paginationDefaults
     });
 
@@ -34,7 +34,7 @@ const Overview = () => {
     };
 
     const onEditBtnClick = async (project) => {
-        navigate(`/projects/details/${project.projectName}`);
+        navigate(`/projects/details/${project.projectId}`);
     }
 
     const onAddBtnClick = async () => {
@@ -48,7 +48,7 @@ const Overview = () => {
 
     const onDelete = async () => {
         try {
-            await destroyProjects(selectedRows.map(row => (row.projectName)));
+            await destroyProjects(selectedRows.map(row => (row.projectId)));
             const response = await readProjects(data.pagination);
             setData(response);
             setShow(!show);

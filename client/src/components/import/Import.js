@@ -5,6 +5,7 @@ import { importTranslations } from "../../services/TranslationsService";
 import { danger, success, info } from "../../base/toast/DwToastHelper";
 import {flattenJSON, parseCSV} from "./Utils";
 import BaseButtons from "../../base/buttons/BaseButtons";
+import { flatten } from 'flat';
 
 function Import(props) {
     const [file, setFile] = useState(null);
@@ -37,14 +38,14 @@ function Import(props) {
             let data;
             try {
                 if (file.type === "application/json") {
-                    data = JSON.parse(event.target.result); // JSON-Datei parsen
-                    data = flattenJSON(data); // JSON flach machen
+                    data = JSON.parse(event.target.result);
+                    data = flattenJSON(data);
                 } else if (file.type === "text/csv") {
-                    data = await parseCSV(event.target.result); // CSV in JSON umwandeln
+                    data = await parseCSV(event.target.result);
                 }
 
                 try {
-                    const response = await importTranslations(props.projectName, data, {}); // Leeres Objekt für Länder und Sprachen
+                    const response = await importTranslations(props.projectId, data, {}); // Leeres Objekt für Länder und Sprachen
                     if (response.success) {
                         success("Import erfolgreich abgeschlossen!");
                         props.onSuccess(); // Rufe die Aktualisierungsfunktion auf

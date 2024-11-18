@@ -9,8 +9,8 @@ moment.locale('de');
 
 export class TranslationsRepository {
 
-  constructor(private projectName: string) {
-    this.projectName = projectName;
+  constructor(private projectId: string) {
+    this.projectId = projectId;
   }
 
   async read(query): Promise<any> {
@@ -18,7 +18,7 @@ export class TranslationsRepository {
 
     let queryString = `
       SELECT id, key, value, country, language, Count(*) Over () as total
-      FROM "${query.projectName}".translations
+      FROM "${query.projectId}".translations
       WHERE key ILIKE '%${key}%'
     `;
 
@@ -72,7 +72,7 @@ export class TranslationsRepository {
   public async find(key: string): Promise<any> {
     let queryString = `
         SELECT id, key, value, country, language
-        FROM "${this.projectName}".translations
+        FROM "${this.projectId}".translations
         WHERE key = '${key}'
     `;
 
@@ -82,7 +82,7 @@ export class TranslationsRepository {
   async create(model: TranslationModel): Promise<any> {
     const result = await databaseAdapter.query(
         `
-        INSERT INTO "${this.projectName}".translations (key, value, language, country)
+        INSERT INTO "${this.projectId}".translations (key, value, language, country)
         VALUES ('${model.key}', '${escapeString(model.value)}', '${model.language}', '${model.country}') RETURNING *
       `
     );
@@ -93,7 +93,7 @@ export class TranslationsRepository {
     const result = await databaseAdapter.query(
         `
     UPDATE
-      "${this.projectName}".translations
+      "${this.projectId}".translations
     SET 
       value = '${escapeString(model.value)}', 
       key = '${model.key}', 
@@ -109,7 +109,7 @@ export class TranslationsRepository {
     await databaseAdapter.query(
         `
         DELETE
-        FROM "${this.projectName}".translations
+        FROM "${this.projectId}".translations
         WHERE id = ${model.id}
       `
     );
@@ -121,7 +121,7 @@ export class TranslationsRepository {
     await databaseAdapter.query(
         `
         DELETE
-        FROM "${this.projectName}".translations
+        FROM "${this.projectId}".translations
         WHERE country = '${country}'
         AND language = '${language}'
       `
@@ -129,10 +129,10 @@ export class TranslationsRepository {
   }
 
 
-  async findByProjectNameAndCountryAndLanguage(projectName, country, language): Promise<any> {
+  async findByProjectNameAndCountryAndLanguage(projectId, country, language): Promise<any> {
     let queryString = `
       SELECT country, Count(*) Over () as total
-      FROM "${projectName}".translations
+      FROM "${projectId}".translations
       WHERE country = '${country}'
     `;
 
@@ -160,15 +160,13 @@ export class TranslationsRepository {
     const queryValues: string[] = [];
 
     Object.entries(data).forEach(([locale, translations]) => {
+
       Object.entries(translations).forEach(([translationKey, value]) => {
         const country = getCountryByLocale(locale);
         const language = getLanguageByLocale(locale);
 
         if (typeof value === 'string') {
-          const escapedKey = translationKey.replace(/'/g, "''");
-          const escapedValue = value.replace(/'/g, "''");
-
-          queryValues.push(`('${escapedKey}', '${escapedValue}', '${language}', '${country}')`);
+          queryValues.push(`('${escapeString(translationKey)}', '${escapeString(value)}', '${language}', '${country}')`);
         } else {
           console.warn(`Der Wert für den Schlüssel "${translationKey}" ist kein gültiger String.`);
         }
@@ -179,8 +177,10 @@ export class TranslationsRepository {
       throw new Error("Keine gültigen Daten zum Einfügen.");
     }
 
+    console.dir(queryValues, {depth: null, colors: true, maxArrayLength: null});
+
     const query = `
-        INSERT INTO "${this.projectName}".translations (key, value, language, country)
+        INSERT INTO "${this.projectId}".translations (key, value, language, country)
         VALUES ${queryValues.join(', ')}
         RETURNING *;
     `;

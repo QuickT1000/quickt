@@ -40,7 +40,7 @@ export class ProjectsController {
 
     async updateAction(req: any, res: any) {
         const repository = new ProjectsRepository();
-        const translationsRepository = new TranslationsRepository(req.body.projectName);
+        const translationsRepository = new TranslationsRepository(req.body.projectId);
         const configurationsRepository = new ConfigurationsRepository();
         const presenter = new UpdateProjectsPresenter(req, res);
         const interactor = new UpdateProjectsInteractor(

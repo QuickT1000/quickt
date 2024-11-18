@@ -15,7 +15,7 @@ const Edit = (props) => {
     const location = useLocation();
     const navigate = useNavigate();
     const isNewEntry = key === 'new';
-    const projectName = project;
+    const projectId = project;
 
     const {
         register,
@@ -113,7 +113,7 @@ const Edit = (props) => {
             success('Changes saved');
 
             if (isNewEntry) {
-                navigate(`/translations/details/${projectName}/${data.key}`);
+                navigate(`/translations/details/${projectId}/${data.key}`);
             }
         } catch (error) {
             console.error('Error updating translations:', error);

@@ -2,8 +2,8 @@ import { databaseAdapter } from '../adapter/postgres';
 
 export class ConfigurationsRepository {
 
-  public async read(projectName: string): Promise<any> {
-    const dbResult = await databaseAdapter.query(`SELECT * FROM "${projectName}".configurations`);
+  public async read(projectId: string): Promise<any> {
+    const dbResult = await databaseAdapter.query(`SELECT * FROM "${projectId}".configurations`);
     return dbResult[0];
   }
 
@@ -12,8 +12,8 @@ export class ConfigurationsRepository {
 
     try {
       const sql = `
-            INSERT INTO "${body.projectName}".configurations (locales, "defaultLocale")
-            VALUES ('${locales}', '${body.defaultLocale}') RETURNING *
+            INSERT INTO "${body.projectId}".configurations (locales, "defaultLocale", "projectName")
+            VALUES ('${locales}', '${body.defaultLocale}', '${body.projectName}') RETURNING *
         `;
       const result = await databaseAdapter.query(sql);
 
@@ -24,15 +24,16 @@ export class ConfigurationsRepository {
     }
   }
 
-  async update(body): Promise<any> {
+  async update(body: any): Promise<any> {
     const locales = JSON.stringify(body.locales);
     const result = await databaseAdapter.query(
         `
     UPDATE
-      "${body.projectName}".configurations
+      "${body.projectId}".configurations
     SET 
       locales = '${locales}', 
       "defaultLocale" = '${body.defaultLocale}', 
+      "projectName" = '${body.projectName}', 
       updated_at = NOW() 
     WHERE id = 1
       RETURNING *  

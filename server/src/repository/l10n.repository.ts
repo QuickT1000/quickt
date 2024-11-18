@@ -6,8 +6,8 @@ moment.locale('de');
 
 export class L10nRepository {
 
-  constructor(private projectName: string) {
-    this.projectName = projectName;
+  constructor(private projectId: string) {
+    this.projectId = projectId;
   }
 
   async read(query: any): Promise<any> {
@@ -15,7 +15,7 @@ export class L10nRepository {
 
     let queryString = `
       SELECT key, value
-      FROM "${this.projectName}".translations
+      FROM "${this.projectId}".translations
       WHERE country = '${country}'
       AND language = '${language}'
     `;

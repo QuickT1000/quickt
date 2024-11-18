@@ -32,7 +32,7 @@ export class TranslationsController {
         const validationError = this.validateRequest(req.query, ReadTranslationsValidation);
         if (validationError) return next(validationError);
 
-        const repository = new TranslationsRepository(req.query.projectName);
+        const repository = new TranslationsRepository(req.query.projectId);
         const presenter = new ReadTranslationsPresenter(req, res);
         const interactor = new ReadTranslationsInteractor(repository, req.query, presenter);
         await interactor.execute();
@@ -42,7 +42,7 @@ export class TranslationsController {
         const validationError = this.validateRequest(req.body, CreateTranslationsValidation);
         if (validationError) return next(validationError);
 
-        const repository = new TranslationsRepository(req.body.projectName);
+        const repository = new TranslationsRepository(req.body.projectId);
         const presenter = new CreateTranslationsPresenter(req, res);
         const interactor = new CreateTranslationsInteractor(repository, req.body, presenter);
         await interactor.execute();
@@ -52,7 +52,7 @@ export class TranslationsController {
         const validationError = this.validateRequest(req.body, UpdateTranslationsValidation);
         if (validationError) return next(validationError);
 
-        const repository = new TranslationsRepository(req.body.projectName);
+        const repository = new TranslationsRepository(req.body.projectId);
         const presenter = new UpdateTranslationsPresenter(req, res);
         const interactor = new UpdateTranslationsInteractor(repository, req.body, presenter);
         await interactor.execute();
@@ -62,17 +62,23 @@ export class TranslationsController {
         const validationError = this.validateRequest(req.body, DeleteTranslationsValidation);
         if (validationError) return next(validationError);
 
-        const repository = new TranslationsRepository(req.body.projectName);
+        const repository = new TranslationsRepository(req.body.projectId);
         const presenter = new DeleteTranslationsPresenter(req, res);
         const interactor = new DeleteTranslationsInteractor(repository, req.body, presenter);
         await interactor.execute();
     }
 
     async importAction(req: any, res: any, next: any) {
-        const validationError = this.validateRequest(req.body, ImportTranslationsValidation);
-        if (validationError) return next(validationError);
 
-        const repository = new TranslationsRepository(req.body.projectName);
+        console.log(req.body.data, ' <------ req.body.data ------ ');
+
+        /*const validationError = this.validateRequest(req.body, ImportTranslationsValidation);
+        if (validationError) return next(validationError);*/
+
+
+
+
+        const repository = new TranslationsRepository(req.body.projectId);
         const presenter = new ImportTranslationsPresenter(req, res);
         const interactor = new ImportTranslationsInteractor(repository, req.body.data, presenter);
         await interactor.execute();
