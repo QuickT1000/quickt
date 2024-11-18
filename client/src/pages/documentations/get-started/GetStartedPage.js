@@ -27,7 +27,7 @@ mv ./.env.dist .env
 Go to root folder of the cloned project and install the deplendencies:
 
 ~~~bash
-./build/build.sh
+./scripts/build.sh
 ~~~
 
 ## Docker
