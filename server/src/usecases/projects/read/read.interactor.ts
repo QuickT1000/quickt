@@ -8,27 +8,37 @@ export class ReadProjectsInteractor {
         private repository: ProjectsRepository,
         private configurationsRepository: ConfigurationsRepository,
         private presenter: ReadProjectsPresenter,
-        private query
+        private query: any
     ) {
     }
 
     async execute() {
         try {
+
             const schemas = await this.repository.read(this.query);
 
-            const projects = schemas.entries.map(async (schema) => {
-                const configuration = await this.configurationsRepository.read(schema.nspname);
+            let filtered = [];
 
-                return {
-                    projectName: configuration.projectName || '',
-                    projectId: schema.nspname,
-                    defaultLocale: configuration.defaultLocale || '',
-                    locales: configuration.locales
+           const filteredEntries = await schemas.entries.map(async (schema) => {
+                const configuration = await this.configurationsRepository.read(schema.nspname, this.query);
+
+                if ((configuration.projectName.indexOf(this.query.projectName) !== -1) &&
+                    (configuration.projectName.indexOf(this.query.defaultLocale) !== -1)) {
+                    filtered.push({
+                        projectName: configuration.projectName || '',
+                        projectId: schema.nspname,
+                        defaultLocale: configuration.defaultLocale || '',
+                        locales: configuration.locales
+                    });
                 }
+
+                return filtered;
             });
 
+           const response = await Promise.all(filteredEntries);
+
             this.presenter.present({
-                entries: await Promise.all(projects),
+                entries: response[0],
                 pagination: schemas.pagination
             });
 

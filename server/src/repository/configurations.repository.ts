@@ -2,8 +2,9 @@ import { databaseAdapter } from '../adapter/postgres';
 
 export class ConfigurationsRepository {
 
-  public async read(projectId: string): Promise<any> {
-    const dbResult = await databaseAdapter.query(`SELECT * FROM "${projectId}".configurations`);
+  public async read(projectId: string, query?: any): Promise<any> {
+    let queryString = `SELECT * FROM "${projectId}".configurations`;
+    const dbResult = await databaseAdapter.query(queryString);
     return dbResult[0];
   }
 

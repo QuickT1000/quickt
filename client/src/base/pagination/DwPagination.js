@@ -6,14 +6,16 @@ const DwPagination = (props) => {
     const {pagination, onChange} = props;
     const total = pagination.total;
     const pages = Math.ceil(total / pagination.pageSize);
-    const mediaMatch = window.matchMedia('(min-width: 630px)');
+    const mediaMatch = window.matchMedia('(min-width: 650px)');
     const [matches, setMatches] = useState(mediaMatch.matches);
 
     useEffect(() => {
-        const handler = e => setMatches(e.matches);
+        const handler = (e) => setMatches(e.matches);
         mediaMatch.addEventListener('change', handler);
-        return () => mediaMatch.removeEventListener('change', handler);
-    });
+        return () => {
+            mediaMatch.removeEventListener('change', handler);
+        };
+    }, []);
 
     const onClick = (pageIndex) => {
         onChange({...pagination, pageIndex});

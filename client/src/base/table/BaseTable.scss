@@ -4,10 +4,33 @@
     tr {
       line-height: 25px;
     }
+
     td {
       word-break: break-all;
     }
   }
+
+  .header-filter {
+    display: none;
+  }
+
+  @media (max-width: 600px) {
+    .header-filter {
+      float: right;
+      display: block;
+    }
+    /*th {
+      font-size: 12px;
+    }*/
+    .filter-row {
+      display: none !important;
+    }
+  }
+
+  .filter-icon {
+    float: right;
+  }
+
 
   .card {
     .card-header {

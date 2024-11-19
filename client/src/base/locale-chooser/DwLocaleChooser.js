@@ -106,7 +106,7 @@ const DwLocaleChooser = (props) => {
                 options={getCountryOptions()}
                 components={{ Option: IconOption }}
                 isClearable={true}
-                placeholder={`filter ${type}`}
+                placeholder={`Select`}
             />
         )
     }
@@ -121,7 +121,7 @@ const DwLocaleChooser = (props) => {
                 onChange={onLanguageSelectChange}
                 options={getLanguageOptions()}
                 isClearable={true}
-                laceholder={`filter ${type}`}
+                placeholder={`Select`}
             />
         )
     }

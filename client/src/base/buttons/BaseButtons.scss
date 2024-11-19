@@ -17,4 +17,11 @@
 
     }
 
+    @media (max-width: 840px) {
+        .btn .btn-text {
+            display: none;
+            padding: 5px;
+        }
+    }
+
 }

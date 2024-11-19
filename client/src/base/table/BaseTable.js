@@ -6,6 +6,7 @@ import BaseFilter from "./filter/BaseFilter";
 import QuicktToolbar from "./toolbar/QuicktToolbar";
 import "./BaseTable.scss";
 import DwPagination from "../pagination/DwPagination";
+import {IoFilter, IoMenu} from "react-icons/io5";
 
 const BaseTable = (props) => {
     const [selectAll, setSelectAll] = useState(false); // Neu: Zustand für Master-Checkbox
@@ -78,10 +79,15 @@ const BaseTable = (props) => {
         return Object.keys(row).map((key) => {
 
             const rowColumn = columns.find(column => {
-                return column.dataIndex === key;
+                return column.show && column.dataIndex === key;
             })
+            if (rowColumn) {
+                return render(row[key], rowColumn?.fieldType, rowColumn?.width, rowColumn?.show, rowColumn?.dataIndex)
+            } else {
+                return null;
+            }
 
-            return render(row[key], rowColumn?.fieldType, rowColumn?.width, rowColumn?.show, rowColumn?.dataIndex)
+
         })
     }
 
@@ -119,6 +125,11 @@ const BaseTable = (props) => {
         }
     };
 
+    const onFilterBtnClick = () => {
+        console.log('filter', ' <------ filter ------ ');
+
+    }
+
     const onFilterDataChange = (filters) => {
         onFilterChange(filters);
         setFilter(filters);
@@ -149,7 +160,12 @@ const BaseTable = (props) => {
         return children.map((column, i) => {
             if (typeof column.props.show !== 'undefined' && column.props.show === false) {
 
-                return (<th style={{display: 'none'}} key={i} scope="col">{column.props.title}</th>)
+                return (
+                    <th className={'table-header'} style={{display: 'none'}} key={i} scope="col">
+                        {column.props.title}
+                        <span className={'filter-icon'}><IoFilter/></span>
+                    </th>
+                )
             } else {
                 return (
                     <th key={i} scope="col">{column.props.title}</th>
@@ -181,9 +197,8 @@ const BaseTable = (props) => {
                 <Card.Body>
                     <Table hover className="" size={'sm'}>
                         <thead>
-                        <tr>
-                            <th scope="col">
-
+                        <tr className="filter-row">
+                            <th scope="col" width={'1%'}>
                             </th>
                             {renderFilter()}
                             <th></th>
@@ -193,13 +208,13 @@ const BaseTable = (props) => {
                                 <input type="checkbox" checked={selectAll} onChange={toggleSelectAll}/>
                             </th>
                             {renderTableHeader()}
-                            <th></th>
+                            <th>   <span className={'header-filter'}><IoFilter className="w-4 h-4" onClick={onFilterBtnClick} /></span></th>
                         </tr>
                         </thead>
                         <tbody>
                         {data.map((row, i) => (
                             <tr key={i} className={'table-data-row'}>
-                                <td className='checkbox-col' style={{paddingTop: '6px'}}>
+                                <td className='checkbox-col' style={{paddingTop: '6px'}}  width={'1%'}>
                                     <input type="checkbox" checked={selectedRows.includes(row)}
                                            onChange={toggleRowSelection.bind(null, row)}/>
                                 </td>

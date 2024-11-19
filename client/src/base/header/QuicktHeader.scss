@@ -15,7 +15,7 @@
     .navbar {
         padding: 0;
         margin-right: auto;
-        z-index: 5000;
+        z-index: 12;
         background-color: #fff;
         min-height: 100%;
     }
@@ -89,7 +89,8 @@
                 }
 
                 &:hover {
-                    background-color: #f8f9fa;
+                    background-color: #e8e8e8;
+                    color: #000;
                 }
             }
         }
