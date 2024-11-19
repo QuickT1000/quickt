@@ -49,6 +49,7 @@ const ProjectsTable = (props) => {
                     fieldType='string'
                     enableFilter={true}
                     width={15}
+                    show={true}
                 />
                 <BaseColumn
                     title='Project Id'
@@ -56,6 +57,7 @@ const ProjectsTable = (props) => {
                     fieldType='string'
                     enableFilter={true}
                     width={15}
+                    show={true}
                 />
                 <BaseColumn
                     title='Default Locale'
@@ -63,6 +65,7 @@ const ProjectsTable = (props) => {
                     fieldType='string'
                     width={15}
                     enableFilter={false}
+                    show={true}
                 />
                 <BaseColumn
                     title='Locales'
@@ -70,6 +73,7 @@ const ProjectsTable = (props) => {
                     fieldType='locales'
                     width={45}
                     enableFilter={true}
+                    show={true}
                 />
             </BaseTable>
         </div>
