@@ -26,7 +26,7 @@ const Overview = () => {
             if (!projectsFetched) {
                 projectsFetched = true;
                 const response = await readProjects(pagination);
-                setData(response);
+                setData({...data, ...response});
             }
         } catch (error) {
             console.error('Error fetching projects:', error);

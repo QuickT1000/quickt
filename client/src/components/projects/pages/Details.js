@@ -22,7 +22,7 @@ const Details = () => {
     const fetchProjects = async (pagination) => {
         try {
                 const response = await readProjects({projectId, pagination});
-                setData(response);
+            setData({...data, ...response});
         } catch (error) {
             console.error('Error fetching translations:', error);
         }
@@ -39,6 +39,7 @@ const Details = () => {
 
     const onCreate = async (project) => {
         try {
+
             await createProjects(project);
             success('Project created');
         } catch (error) {
@@ -50,7 +51,7 @@ const Details = () => {
         <div className="m-2">
             <Edit
                 title={title}
-                data={data.entries[0]}
+                data={data?.entries[0]}
                 onCreate={onCreate}
                 onUpdate={onUpdate}
             />

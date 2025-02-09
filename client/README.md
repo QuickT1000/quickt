@@ -3,7 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Environments
 You need to rename .env.dist to .env
 ~~~bash
-mv ./.env.dist .env
+mv ./.env .env
 ~~~
 
 ## Install Project
