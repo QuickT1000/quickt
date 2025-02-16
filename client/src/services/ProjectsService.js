@@ -1,21 +1,10 @@
-import {paginationDefaults} from "../base/pagination/defaults/pagination.defaults";
-
 export async function readProjects(props) {
+    const response = await fetch('/api/projects/v1/read', {
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(props)
+    });
 
-    const {
-        projectName = '',
-        defaultLocale = '',
-        projectId = '',
-        pagination = paginationDefaults
-    } = props;
-
-    let params = `?projectName=${projectName}&defaultLocale=${defaultLocale}&projectId=${projectId}`;
-
-    if (pagination) {
-        params += `&pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}`
-    }
-
-    const response = await fetch(`/api/projects/v1/read${params}`);
     return await response.json();
 }
 

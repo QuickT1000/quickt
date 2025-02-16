@@ -1,25 +1,27 @@
 import React from 'react';
-import {Route, Routes} from "react-router-dom";
+import {Navigate, Route, Routes} from "react-router-dom";
 import './App.scss';
-
+import 'primeicons/primeicons.css';
+import IndexPage from "./pages/IndexPage";
+import {DashboardPage} from "./pages/dashboard/DashboardPage";
 import TranslationsPage from "./pages/translationspage/TranslationsPage";
-import {LandingPage} from "./pages/landingpage/LandingPage";
+import ProjectsPage from "./pages/projects/ProjectsPage";
 import {GetStartedPage} from "./pages/documentations/get-started/GetStartedPage";
 import {ApiSpecsPage} from "./pages/documentations/api-specs/ApiSpecsPage";
-import {DashboardPage} from "./pages/dashboard/DashboardPage";
-import ProjectsPage from "./pages/projects/ProjectsPage";
 import {UserGuidePage} from "./pages/documentations/user-guide/UserGuidePage";
 
 const App = () => {
     return(
         <Routes>
-            <Route path="/" element={<DashboardPage></DashboardPage>}/>
-            <Route path="/info" element={<LandingPage></LandingPage>}/>
-            <Route path="/translations/*" element={<TranslationsPage></TranslationsPage>}/>
-            <Route path="/projects/*" element={<ProjectsPage></ProjectsPage>}/>
-            <Route path="/documentations/get-started/*" element={<GetStartedPage></GetStartedPage>}/>
-            <Route path="/documentations/api-specs/*" element={<ApiSpecsPage></ApiSpecsPage>}/>
-            <Route path="/documentations/user-guide/*" element={<UserGuidePage></UserGuidePage>}/>
+            <Route path="/" element={<IndexPage><DashboardPage/></IndexPage>}/>
+            <Route path="/:projectId">
+                <Route path="/:projectId" element={<IndexPage><DashboardPage/></IndexPage>}></Route>
+                <Route path="/:projectId/translations/*" element={<IndexPage><TranslationsPage/></IndexPage>}></Route>
+                <Route path="/:projectId/projects*" element={<IndexPage><ProjectsPage/></IndexPage>}/>
+                <Route path="/:projectId/documentations/get-started/*" element={<IndexPage><GetStartedPage/></IndexPage>}/>
+                <Route path="/:projectId/documentations/api-specs/*" element={<IndexPage><ApiSpecsPage/></IndexPage>}/>
+                <Route path="/:projectId/documentations/user-guide/*" element={<IndexPage><UserGuidePage/></IndexPage>}/>
+            </Route>
         </Routes>
     );
 }

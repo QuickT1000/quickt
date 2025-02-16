@@ -5,10 +5,12 @@ moment.locale('de');
 
 export class ProjectsRepository {
 
-  public async read({ pageSize = 10, pageIndex = 1, projectId = '' }): Promise<any> {
-    const offset = (pageIndex - 1) * pageSize;
+  public async read(body): Promise<any> {
 
-    // Abfrage für die Daten mit Pagination und Schema-BaseFilter
+    const { page, rows } = body;
+
+    const offset = page * rows;
+
     const queryString = `
     select
       n.nspname, c.relname
@@ -19,8 +21,9 @@ export class ProjectsRepository {
     where
       c.relkind = 'r'
       and c.relname = 'translations'
-      ${projectId ? `and n.nspname like '%${projectId}%'` : ''}
-    limit ${pageSize}
+      ${body?.filters?.projectId?.value ? `and n.nspname like '%${body?.filters.projectId.value}%'` : ''}
+    ORDER BY n.nspname ASC
+    limit ${rows}
     offset ${offset};
   `;
 
@@ -35,7 +38,7 @@ export class ProjectsRepository {
     where
       c.relkind = 'r'
       and c.relname = 'translations'
-      ${projectId ? `and n.nspname like '%${projectId}%'` : ''};
+      ${body?.filters?.projectId?.value ? `and n.nspname like '%${body?.filters?.projectId?.value}%'` : ''};
   `;
 
     // Führe beide Abfragen aus
@@ -45,10 +48,11 @@ export class ProjectsRepository {
 
     return {
       entries,
-      pagination: {
+      filter: {
+        ...body,
         total: Number(total),
-        pageIndex: Number(pageIndex),
-        pageSize: Number(pageSize),
+        page,
+        rows,
       },
     };
   }

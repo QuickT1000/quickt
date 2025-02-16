@@ -1,81 +1,70 @@
-import React, {useContext, useState} from 'react';
+import React, { useState } from 'react';
 import "./ProjectsTable.scss";
-import BaseTable from "../../../base/table/BaseTable";
-import {BaseColumn} from "../../../base/table/BaseColumn";
+import {Column} from "primereact/column";
+import {DataTable} from "primereact/datatable";
+import {useProjectsStore} from "../../../store/projects";
+import {FilterMatchMode} from "primereact/api";
 
 const ProjectsTable = (props) => {
-    const { data, onAddBtnClick, onEditBtnClick, onDeleteBtnClick, onHelpBtnClick, onPaginationChange, onChange } = props;
+    const {onChange} = props;
+    const {
+        projects,
+        selectedProjects,
+        setSelectedProjects,
+        projectsFilter
+    } = useProjectsStore();
 
-    const [selectedRows, setSelectedRows] = useState([]);
+    const [filters, setFilters] = useState({
+        projectId: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+        projectName: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+        defaultLocale: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+        locales: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+    });
 
-    const onEditButtonClick = () => {
-        onEditBtnClick(selectedRows[0]);
-    }
+    const onSelectionChange = (e) => {
+        setSelectedProjects(e.value);
+    };
 
-    const onActionEditButtonClick = (idx) => {
-        onEditBtnClick(data.entries[idx]);
-    }
+    const localesBodyTemplate = (projects) => {
+        return projects.locales.map((rec) => {
+            const country = rec.substring(3, 5)
+            const language = rec.substring(0, 2)
+            return (
+                <div style={{display: 'inline-block', minWidth: 80, padding: 3}}>
+                    <span  className={`fi fi-${country.toLowerCase()}`}></span>
+                    <span style={{marginRight: 10}}>{`${country}-${language}`}</span>
+                </div>
+            )
 
-    const onDeleteButtonClick = () => {
-        onDeleteBtnClick(selectedRows);
-    }
-
-    const onSelect = (selectedRows) => {
-        setSelectedRows(selectedRows);
-    }
-
-    const onFilterChange = (filter) => {
-        onChange(filter);
-    }
+        })
+    };
 
     return (
         <div className="projects-table">
-            <BaseTable
-                id={'projectsTable'}
-                data={data.entries}
-                onAddButtonClick={onAddBtnClick}
-                onEditButtonClick={onEditButtonClick}
-                onDeleteButtonClick={onDeleteButtonClick}
-                onActionEditButtonClick={onActionEditButtonClick}
-                onHelpButtonClick={onHelpBtnClick}
-                onSelect={onSelect}
-                onFilterChange={onFilterChange}
-                pagination={data.pagination}
-                onPaginationChange={onPaginationChange}
-            >
-                <BaseColumn
-                    title='Project Name'
-                    dataIndex={'projectName'}
-                    fieldType='string'
-                    enableFilter={true}
-                    width={15}
-                    show={true}
-                />
-                <BaseColumn
-                    title='Project Id'
-                    dataIndex={'projectId'}
-                    fieldType='string'
-                    enableFilter={true}
-                    width={15}
-                    show={true}
-                />
-                <BaseColumn
-                    title='Default Locale'
-                    dataIndex={'defaultLocale'}
-                    fieldType='string'
-                    width={15}
-                    enableFilter={false}
-                    show={true}
-                />
-                <BaseColumn
-                    title='Locales'
-                    dataIndex={'locales'}
-                    fieldType='locales'
-                    width={45}
-                    enableFilter={true}
-                    show={true}
-                />
-            </BaseTable>
+            <DataTable
+                paginator
+                lazy
+                rows={projectsFilter.rows}
+                first={projectsFilter.page * projectsFilter.rows}
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                value={projects}
+                onSelectionChange={onSelectionChange}
+                filterDisplay="row"
+                onFilter={onChange}
+                filters={filters}
+                globalFilterFields={['projectId']}
+                totalRecords={projectsFilter.total}
+                selectionMode="multiple"
+                selection={selectedProjects}
+                onPage={onChange}
+                tableStyle={{minWidth: '50rem'}}
+                dataKey="projectId">
+                    <Column selectionMode="multiple" headerStyle={{width: '3rem'}}></Column>
+                    <Column field="projectId" header="Project Id" filter filterPlaceholder="Search by Project Id" style={{minWidth: '12rem'}}/>
+                    <Column field="projectName" header="ProjectName" style={{minWidth: '12rem'}}/>
+                    <Column field="defaultLocale" header="Default Locale" style={{minWidth: '12rem'}}/>
+                    <Column body={localesBodyTemplate} field="locales" header="Locales"  style={{minWidth: '12rem'}}/>
+            </DataTable>
         </div>
     );
 }

@@ -5,102 +5,12 @@
     z-index: 12;
     width: 100%;
 
-    &__brand {
-        font-weight: bold;
-        img {
-            height: 26px;
-        }
+    .active {
+        background-color: #e5e7eb;
     }
 
-    .navbar {
-        padding: 0;
-        margin-right: auto;
-        z-index: 12;
-        background-color: #fff;
-        min-height: 100%;
-    }
-
-    .navbar-toggler:focus {
-        box-shadow: none;
-    }
-
-    &__extra {
-        display: flex;
-        width: 120px;
-        padding: 0;
-    }
-
-    // Navigation Styling
-    .nav-link {
-        position: relative;
-        display: flex;
-        align-items: center;
-        margin-right: 7px;
-
-        &.active {
-            color: #6e3cc3 !important;
-            font-weight: 500;
-        }
-
-        // Remove default dropdown arrow
-        &.dropdown-toggle::after {
-            display: none;
-        }
-    }
-
-    // Custom arrow styling
-    .dropdown-arrow {
-        font-size: 1.1rem;
-        transition: transform 0.2s ease;
-        margin-left: 4px;
-
-        &.rotated {
-            transform: rotate(180deg);
-        }
-    }
-
-    // Dropdown Styling
     .dropdown {
-        &.active {
-            .nav-link {
-                color: #6e3cc3 !important;
-                font-weight: 500;
-            }
-        }
-
-        &.show {
-            .dropdown-menu {
-                margin-top: 0;
-                border: 1px solid #dadada;
-                border-radius: 0;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            }
-
-            .dropdown-arrow {
-                transform: rotate(180deg);
-            }
-        }
-
-        .dropdown-menu {
-            .dropdown-item {
-                &.active {
-                    background-color: #6e3cc3;
-                    color: white;
-                }
-
-                &:hover {
-                    background-color: #e8e8e8;
-                    color: #000;
-                }
-            }
-        }
-    }
-
-    @media (max-width: 840px) {
-        .navbar-nav {
-            height: auto;
-            max-height: calc(100vh - 58px);
-            overflow-y: auto;
-        }
+        min-width: 150px;
+        margin-right: 10px;
     }
 }

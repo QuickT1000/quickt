@@ -1,37 +1,55 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {useEffect, useRef} from 'react';
 import Edit from "../forms/Edit";
-import { useParams } from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {createProjects, readProjects, updateProjects} from "../../../services/ProjectsService";
-import {paginationDefaults} from "../../../base/pagination/defaults/pagination.defaults";
-import {success} from "../../../base/toast/DwToastHelper";
+import {useProjectsStore} from "../../../store/projects";
+import './Details.scss';
+import { Toast } from 'primereact/toast';
 
 const Details = () => {
-    const [data, setData] = useState({
-        entries: [{projectName: '', projectId: '', defaultLocale: '', locales: []}],
-        pagination: paginationDefaults});
-
+    const {
+        selectedProjects,
+        setSelectedProjects,
+        projectsFilter,
+        setProjectsFilter,
+        projects,
+        setProjects
+    } = useProjectsStore();
+    const toast = useRef(null);
     let { projectId } = useParams();
     const isNewProject = projectId === 'new';
     const title = isNewProject ? 'New Project' : 'Edit Project';
-
+    const navigate = useNavigate();
 
     useEffect(() => {
-        fetchProjects(paginationDefaults);
-    }, [projectId]);
+        setSelectedProjects([]);
+        fetchProjects()
+    }, []);
 
-    const fetchProjects = async (pagination) => {
+
+    const fetchProjects = async () => {
         try {
-                const response = await readProjects({projectId, pagination});
-            setData({...data, ...response});
+            const payload = {
+                ...projectsFilter,
+                filters: {
+                    projectId: {
+                        value: projectId
+                    }
+                }
+            }
+            const response = await readProjects(payload);
+            setSelectedProjects(response.entries)
         } catch (error) {
-            console.error('Error fetching translations:', error);
+            console.error('Error fetching filtered data:', error);
         }
-    };
+    }
 
     const onUpdate = async (project) => {
         try {
             await updateProjects(project);
-            success('Project updated');
+            const response = await readProjects({rows: 10, page: 0});
+            setProjects(response.entries)
+            toast.current.show({ severity: 'success', summary: 'Info', detail: 'Projects updated' });
         } catch (error) {
             console.error('Error updating translations:', error);
         }
@@ -39,22 +57,25 @@ const Details = () => {
 
     const onCreate = async (project) => {
         try {
-
             await createProjects(project);
-            success('Project created');
+            const response = await readProjects({rows: 10, page: 0});
+            setProjects(response.entries);
+            navigate(`/${project.projectId}/projects/details/${project.projectId}`);
+            toast.current.show({ severity: 'success', summary: 'Info', detail: 'Projects created' });
         } catch (error) {
             console.error('Error creating translations:', error);
         }
     };
 
     return (
-        <div className="m-2">
+        <div className="projects-details-page">
             <Edit
                 title={title}
-                data={data?.entries[0]}
+                data={selectedProjects[0]}
                 onCreate={onCreate}
                 onUpdate={onUpdate}
             />
+            <Toast ref={toast} />
         </div>
     );
 };

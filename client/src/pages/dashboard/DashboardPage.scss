@@ -5,8 +5,11 @@
   position: relative;
   color: #000;
   min-height: 970px;
-  background: url("../../../public/background.png");
-  background-size: cover;
+
+  .title {
+    margin: 15px;
+
+  }
 
   #logo {
     color: #6e3cc3;

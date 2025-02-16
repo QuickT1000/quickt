@@ -1,0 +1,21 @@
+.projects-details-page {
+
+  padding: 15px;
+
+  .edit-form {
+
+    input, #defaultLocale, .multi-select {
+      margin: 10px 0 15px 0;
+    }
+
+    &__buttons {
+      max-width: 200px;
+      display: flex;
+      align-items: center;
+
+      button {
+        margin-right: 3px
+      }
+    }
+  }
+}

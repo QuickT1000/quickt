@@ -15,18 +15,17 @@ import {TranslationsRepository} from "@repository/translations.repository";
 export class ProjectsController {
 
     constructor(server: any) {
-        server.get('/api/projects/v1/read', this.readAction.bind(this));
+        server.post('/api/projects/v1/read', this.readAction.bind(this));
         server.post('/api/projects/v1/create', this.createAction.bind(this));
         server.post('/api/projects/v1/update', this.updateAction.bind(this));
         server.post('/api/projects/v1/delete', this.deleteAction.bind(this));
     }
 
-
     async readAction(req: any, res: any) {
         const repository = new ProjectsRepository();
         const configurationsRepository = new ConfigurationsRepository();
         const presenter = new ReadProjectsPresenter(req, res);
-        const interactor = new ReadProjectsInteractor(repository, configurationsRepository, presenter, req.query);
+        const interactor = new ReadProjectsInteractor(repository, configurationsRepository, presenter, req.body);
         await interactor.execute();
     }
 

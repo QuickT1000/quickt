@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {Modal} from "react-bootstrap";
-import BaseButtons from "../../../base/buttons/BaseButtons";
 import RenameForm from "../forms/Rename";
+import {Dialog} from "primereact/dialog";
+import {Button} from "primereact/button";
 
 const RenameModal = (props) => {
     const [renameButtonActive, setRenameButtonActive] = useState(true);
@@ -11,16 +11,22 @@ const RenameModal = (props) => {
         props.onSave(newKey);
     }
     return (
-        <Modal show={props.show} onHide={props.onClose}>
-            <Modal.Header closeButton><Modal.Title>Rename Key</Modal.Title></Modal.Header>
-            <Modal.Body>
-                <RenameForm onChange={setNewKey} setRenameButtonActive={setRenameButtonActive} value={props.oldKey}/>
-            </Modal.Body>
-            <Modal.Footer>
-                <BaseButtons button='save' onClick={onSaveBtnClick} disabled={renameButtonActive} />
-                <BaseButtons button='cancel' onClick={props.onClose} />
-            </Modal.Footer>
-        </Modal>
+        <Dialog
+            header="Rename Key"
+            visible={props.show}
+            position={'top'}
+            style={{ width: '50vw' }}
+            onHide={props.onClose}
+            footer={
+            <>
+                <Button label="Save" className="p-button-danger" onClick={onSaveBtnClick}/>
+                <Button label="Cancel" onClick={props.onClose}/>
+            </>
+            }
+            draggable={false}
+            resizable={false}>
+            <RenameForm onChange={setNewKey} setRenameButtonActive={setRenameButtonActive} value={props.oldKey}/>
+        </Dialog>
     );
 }
 

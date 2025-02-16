@@ -5,18 +5,18 @@ export class ReadTranslationsInteractor {
 
   constructor(
     private repository: TranslationsRepository,
-    private query: any,
+    private body: any,
     private presenter: ReadTranslationsPresenter
   ) {
   }
 
   async execute() {
     try {
-      const translations = await this.repository.read(this.query);
+      const translations = await this.repository.read(this.body);
       this.presenter.present(translations);
     } catch (e) {
       return this.presenter.presentError(e.toString());
     }
-
   }
+
 }

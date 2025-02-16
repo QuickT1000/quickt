@@ -1,6 +1,5 @@
-import {FormControl} from "react-bootstrap";
 import React from "react";
-import Alert from "react-bootstrap/Alert";
+import {InputText} from "primereact/inputtext";
 
 const DeleteForm = (props) => {
     const { setDeleteButtonActive } = props;
@@ -15,11 +14,11 @@ const DeleteForm = (props) => {
 
     return (
         <>
-            <Alert key='danger' variant='danger'>
+            <div key='danger' variant='danger'>
                 Please type <b>DELETE</b> to confirm. <br/>
                 <b>Warning:</b> This will permanently delete all database tables associated with this project.
-            </Alert>
-            <FormControl
+            </div>
+            <InputText
                 placeholder="DELETE"
                 onChange={onDeleteTextInput}
             />

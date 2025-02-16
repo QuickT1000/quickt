@@ -5,7 +5,7 @@ export const DeleteTranslationsValidation = joi.object({
     entries: joi.array().items({
         id: joi.number().required(),
         key: joi.string().required(),
-        value: joi.string().required().allow(''),
+        value: joi.string().optional().allow(''),
         country: joi.string().required(),
         language: joi.string().required()
     })

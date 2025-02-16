@@ -1,50 +1,46 @@
-import {ReadProjectsPresenter} from './read.presenter';
-import {ProjectsRepository} from '@repository/projects.repository';
-import {ConfigurationsRepository} from "@repository/configurations.repository";
+import { ReadProjectsPresenter } from './read.presenter';
+import { ProjectsRepository } from '@repository/projects.repository';
+import { ConfigurationsRepository } from "@repository/configurations.repository";
 
 export class ReadProjectsInteractor {
-
     constructor(
         private repository: ProjectsRepository,
         private configurationsRepository: ConfigurationsRepository,
         private presenter: ReadProjectsPresenter,
-        private query: any
-    ) {
-    }
+        private body: any
+    ) {}
 
     async execute() {
         try {
+            const schemas = await this.repository.read(this.body);
 
-            const schemas = await this.repository.read(this.query);
+            // Warte auf alle Promises und erstelle das Array
+            const filtered = await Promise.all(
+                schemas.entries.map(async (schema) => {
+                    // Hier wird der Fehler gefixt, indem wir `as any` verwenden, um TypeScript zu sagen, dass `configuration` ein beliebiges Objekt ist.
+                    const configuration = await this.configurationsRepository.read(schema.nspname, this.body) as any;
 
-            let filtered = [];
-
-           const filteredEntries = await schemas.entries.map(async (schema) => {
-                const configuration = await this.configurationsRepository.read(schema.nspname, this.query);
-
-                if ((configuration.projectName.indexOf(this.query.projectName) !== -1) &&
-                    (configuration.projectName.indexOf(this.query.defaultLocale) !== -1)) {
-                    filtered.push({
+                    return {
                         projectName: configuration.projectName || '',
                         projectId: schema.nspname,
                         defaultLocale: configuration.defaultLocale || '',
-                        locales: configuration.locales
-                    });
-                }
+                        locales: configuration.locales || []
+                    };
+                })
+            );
 
-                return filtered;
-            });
+            // Sortiere nach projectName (Case-Insensitive)
+            filtered.sort((a: any, b: any) => a.projectName.localeCompare(b.projectName, 'de', { sensitivity: 'base' }));
 
-           const response = await Promise.all(filteredEntries);
-
+            // Rückgabe der Daten
             this.presenter.present({
-                entries: response[0],
-                pagination: schemas.pagination
+                entries: filtered,
+                filter: schemas.filter
             });
 
         } catch (e) {
+            // Fehlerbehandlung
             return this.presenter.presentError(e.toString());
         }
-
     }
 }

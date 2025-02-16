@@ -19,7 +19,7 @@ import {ReadTranslationsInteractor} from "@usecases/translations/read/read.inter
 export class TranslationsController {
 
     constructor(server: any) {
-        server.get('/api/translations/v1/read', this.readAction.bind(this));
+        server.post('/api/translations/v1/read', this.readAction.bind(this));
         server.post('/api/translations/v1/create', this.createAction.bind(this));
         server.post('/api/translations/v1/update', this.updateAction.bind(this));
         server.post('/api/translations/v1/destroy', this.deleteAction.bind(this));
@@ -27,12 +27,11 @@ export class TranslationsController {
     }
 
     async readAction(req: any, res: any, next) {
-        const validationError = this.validateRequest(req.query, ReadTranslationsValidation);
-        if (validationError) return next(validationError);
-
-        const repository = new TranslationsRepository(req.query.projectId);
+        //const validationError = this.validateRequest(req.body, ReadTranslationsValidation);
+        //if (validationError) return next(validationError);
+        const repository = new TranslationsRepository(req.body?.projectId);
         const presenter = new ReadTranslationsPresenter(req, res);
-        const interactor = new ReadTranslationsInteractor(repository, req.query, presenter);
+        const interactor = new ReadTranslationsInteractor(repository, req.body, presenter);
         await interactor.execute();
     }
 

@@ -9,7 +9,7 @@ const Routes = () => {
     return (
         <ReactRoutes>
             <Route path="/" element={overview}/>
-            <Route path="/details/:project/:key" element={details}/>
+            <Route path="/details/:key" element={details}/>
         </ReactRoutes>
     );
 };

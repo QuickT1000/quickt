@@ -1,0 +1,44 @@
+.translations-details-page {
+
+  padding: 15px;
+
+  .edit-form {
+
+    &__input-group {
+      margin-bottom: 8px;
+    }
+
+    &__flags {
+      min-width: 100px;
+      align-items: center;
+      justify-content: left;
+
+      &__locales {
+        margin-left: 5px;
+      }
+    }
+
+    &__header {
+      display: flex;
+
+      &__key-input {
+        margin-right: 5px;
+        flex-grow: 1;
+      }
+    }
+
+    &__buttons {
+      max-width: 200px;
+      display: flex;
+      align-items: center;
+
+      button {
+        margin-right: 3px
+      }
+    }
+
+    &__translations {
+      margin-top: 20px;
+    }
+  }
+}
