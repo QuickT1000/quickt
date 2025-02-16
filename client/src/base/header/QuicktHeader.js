@@ -1,138 +1,119 @@
-import React, { useState, useEffect, useRef } from "react";
-import {
-    Container,
-    Nav,
-    Navbar,
-    NavDropdown
-} from "react-bootstrap";
-import { useLocation, useNavigate } from "react-router-dom";
-import { IoIosArrowDown } from "react-icons/io";
+import React, {useRef} from "react";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import "./QuicktHeader.scss";
-import {IoMenu} from "react-icons/io5";
+import {Menubar} from "primereact/menubar";
+import {MAIN_NAVIGATION, PROJECTS_NAVIGATION} from "../../services/NavigartionService";
+import {useGlobalStore} from "../../store/global";
+import {Menu} from "primereact/menu";
+import {Button} from "primereact/button";
+import {Dropdown} from "primereact/dropdown";
+import {ChevronRightIcon} from "primereact/icons/chevronright";
+import {ChevronDownIcon} from "primereact/icons/chevrondown";
+import {useProjectsStore} from "../../store/projects";
 
-export const QuicktHeader = (props) => {
-    const { navigation, children } = props;
+export const QuicktHeader = () => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [openDropdown, setOpenDropdown] = useState(null);
-    const [isHovering, setIsHovering] = useState(false);
-    const dropdownRef = useRef(null);
+    const menuLeft = useRef(null);
+    const { projectId } = useParams();
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                setOpenDropdown(null);
-                setIsHovering(false);
-            }
-        };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
+    const {
+        selectedProject,
+        setSelectedProject,
+    } = useGlobalStore();
 
-    const onNavItemSelect = (link) => {
-        navigate({ pathname: link });
-        setOpenDropdown(null);
-    };
+    const {
+        projects
+    } = useProjectsStore();
 
-    const isActive = (item) => {
-        if (item.link === location.pathname) return true;
-        if (item.subItems) {
-            return item.subItems.some(subItem => subItem.link === location.pathname);
+    const projectCommand  = (nav) => {
+        navigate('/' + selectedProject.projectId + nav.path)
+    }
+
+    const projectsNavigation = PROJECTS_NAVIGATION.map((nav) => {
+        let isActive = location.pathname === nav.path;
+
+
+        if (nav.showProjectsSelect) {
+            isActive = location.pathname === `/${projectId}${nav.path}`
         }
-        return false;
+
+        return {
+            label: nav.label,
+            icon: nav.icon,
+            command: () => projectCommand(nav), className: isActive ? 'active' : ''
+        }
+    });
+
+    const selectedTemplate = (option, props) => {
+        if (option) {
+            return (
+                <div className="flex align-items-center">
+                    <div>{option.projectName}</div>
+                </div>
+            );
+        }
+
+        return <span>{props.placeholder}</span>;
     };
 
-    const handleDropdownEnter = (idx) => {
-        setOpenDropdown(idx);
-        setIsHovering(true);
+    const optionTemplate = (option) => {
+        return (
+            <div className="flex align-items-center">
+                <div>{option.projectName}</div>
+            </div>
+        );
     };
 
-    const handleDropdownLeave = () => {
-        setTimeout(() => {
-            if (!isHovering) {
-                setOpenDropdown(null);
-            }
-        }, 100);
-        setIsHovering(false);
-    };
+    const onChange = (e) => {
+        const newProject = e.value;
+        setSelectedProject(newProject);
+        const currentPath = location.pathname;
+        const updatedPath = currentPath.replace(/\/[^/]+/, `/${newProject.projectId}`);
+        navigate(updatedPath);
+    }
 
-    const CustomDropdownTitle = ({ label }) => (
-        <span className="d-flex align-items-center">
-            {label}
-            <IoIosArrowDown className={`ms-1 dropdown-arrow ${openDropdown !== null ? 'rotated' : ''}`} />
-        </span>
+    const currentNav = PROJECTS_NAVIGATION.find(nav => location.pathname === '/'+selectedProject.projectId + nav.path);
+    const showEndTemplate = currentNav ? currentNav.showProjectsSelect : false;
+
+    const dropdown = (
+
+        <Dropdown value={selectedProject}
+                  onChange={onChange}
+                  options={projects}
+                  optionLabel="projectName"
+                  placeholder="Select a Project"
+                  valueTemplate={selectedTemplate}
+                  itemTemplate={optionTemplate}
+                  className="dropdown"
+                  dropdownIcon={(opts) => {
+                      return opts.iconProps['data-pr-overlay-visible'] ? <ChevronRightIcon {...opts.iconProps} /> :
+                          <ChevronDownIcon {...opts.iconProps} />;
+                  }}/>
+
     );
 
-    const navigationItems = () => {
-        return navigation.map((item, idx) => {
-            const hasSubItems = item.subItems && item.subItems.length > 0;
-            const active = isActive(item);
-
-            if (hasSubItems) {
-                return (
-                    <NavDropdown
-                        key={idx}
-                        title={<CustomDropdownTitle label={item.label} />}
-                        id={`nav-dropdown-${idx}`}
-                        show={openDropdown === idx}
-                        onMouseEnter={() => handleDropdownEnter(idx)}
-                        onMouseLeave={handleDropdownLeave}
-                        className={active ? 'active' : ''}
-                        ref={dropdownRef}
-                    >
-                        {item.subItems.map((subItem, subIdx) => (
-                            <NavDropdown.Item
-                                key={subIdx}
-                                onClick={() => onNavItemSelect(subItem.link)}
-                                active={subItem.link === location.pathname}
-                                onMouseEnter={() => setIsHovering(true)}
-                                onMouseLeave={() => setIsHovering(false)}
-                            >
-                                {subItem.label}
-                            </NavDropdown.Item>
-                        ))}
-                    </NavDropdown>
-                );
-            } else {
-                return (
-                    <Nav.Link
-                        key={idx}
-                        onClick={() => onNavItemSelect(item.link)}
-                        className={active ? 'active' : ''}
-                    >
-                        {item.label}
-                    </Nav.Link>
-                );
-            }
-        });
-    }
-
-    const getChildren = (type) => {
-        if (children && children.props) {
-            return children.props.id === type ? children.props.children : [];
+    const mainNavigation = MAIN_NAVIGATION.map((nav) => {
+        const isActive = location.pathname === nav.path;
+        return {
+            label: nav.label,
+            icon: nav.icon,
+            command: () => projectCommand(nav), className: isActive ? 'active' : '',
         }
-        return children ? children.filter(child => child.props.id === type) : []
-    }
+    });
+
+    const endTemplate = (
+        <>
+            {dropdown}
+            <Menu model={mainNavigation} popup ref={menuLeft} id="popup_menu_left"/>
+            <Button icon="pi pi-question" rounded severity="info" aria-label="User" onClick={(event) => menuLeft.current.toggle(event)} />
+        </>
+    )
 
     return (
         <div className='quickt__header'>
-            <Navbar expand="lg">
-                <Container fluid>
-                    <Navbar.Brand className='quickt__header__brand' href="/">
-                        {getChildren('logo')}
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="navbarScroll"> <IoMenu /> </Navbar.Toggle>
-                    <Navbar.Collapse id="navbarScroll">
-                        <Nav className="me-auto" navbarScroll>
-                            {navigationItems()}
-                        </Nav>
-                        {getChildren('extras')}
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
+            <Menubar model={projectsNavigation} end={endTemplate}/>
         </div>
     );
 };

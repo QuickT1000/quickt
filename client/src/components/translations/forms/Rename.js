@@ -1,5 +1,5 @@
-import {FormControl} from "react-bootstrap";
 import React from "react";
+import { InputText } from 'primereact/inputtext';
 
 const RenameForm = (props) => {
     const { setRenameButtonActive, onChange, value } = props;
@@ -16,7 +16,7 @@ const RenameForm = (props) => {
     return (
         <>
             <label>Key: </label>
-            <FormControl size={'sm'} defaultValue={value} onChange={onRenameTextInput} />
+            <InputText defaultValue={value} onChange={onRenameTextInput} />
         </>
     )
 };

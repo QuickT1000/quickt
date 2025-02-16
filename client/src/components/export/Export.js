@@ -1,7 +1,7 @@
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
-import BaseButtons from "../../base/buttons/BaseButtons";
 import {exportFile} from "./Utils";
+import {Dialog} from "primereact/dialog";
+import {Button} from "primereact/button";
 
 function Export(props) {
     const { data, show, onClose } = props;
@@ -11,27 +11,23 @@ function Export(props) {
     }
 
     return (
-        <Modal show={show} onHide={onHide}>
-            <Modal.Header closeButton>
-                <Modal.Title>Export</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                Please choose export format.
-            </Modal.Body>
-            <Modal.Footer>
-                <BaseButtons button='cancel' onClick={onHide}/>
-                <BaseButtons
-                    button='export'
-                    text='JSON'
-                    onClick={() => exportFile('json', data)}
-                />
-                <BaseButtons
-                    button='export'
-                    text='CSV'
-                    onClick={() => exportFile('csv', data)}
-                />
-            </Modal.Footer>
-        </Modal>
+        <Dialog
+            header="Import"
+            visible={show}
+            position={'top'}
+            style={{width: '50vw'}}
+            onHide={onHide}
+            footer={
+                <>
+                    <Button label="JSON" className="p-button-success" onClick={() => exportFile('json', data)}/>
+                    <Button label="CSV" className="p-button-success" onClick={() => exportFile('csv', data)}/>
+                    <Button label="Cancel" onClick={onHide}/>
+                </>
+            }
+            draggable={false}
+            resizable={false}>
+            Please choose export format.
+        </Dialog>
     );
 }
 

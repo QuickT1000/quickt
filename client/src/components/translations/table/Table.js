@@ -1,111 +1,68 @@
-import React, {useEffect, useState} from 'react';
-import "./Table.scss";
-import BaseTable from "../../../base/table/BaseTable";
-import {BaseColumn} from "../../../base/table/BaseColumn";
+import React, {useState} from 'react';
+import {DataTable} from "primereact/datatable";
+import {Column} from "primereact/column";
+import {FilterMatchMode} from "primereact/api";
+import {useTranslationsStore} from "../../../store/translations";
 
 const Table = (props) => {
+
     const {
-        data,
-        onAddBtnClick,
-        onEditBtnClick,
-        onDeleteBtnClick,
-        onHelpBtnClick,
-        onImportBtnClick,
-        onExportBtnClick,
-        onPaginationChange,
-        onSelectionChange,
-        onChange,
-        locales
-    } = props;
+        translations,
+        selectedTranslations,
+        translationsFilter,
+        setSelectedTranslations,
+        setTranslationsFilter
+    } = useTranslationsStore();
 
-    const [selectedRows, setSelectedRows] = useState([]);
-    const mediaMatch = window.matchMedia('(min-width: 650px)');
-    const [matches, setMatches] = useState(mediaMatch.matches);
-
-    useEffect(() => {
-        const handler = e => setMatches(e.matches);
-        mediaMatch.addEventListener('change', handler);
-        return () => mediaMatch.removeEventListener('change', handler);
+    const [filters, setFilters] = useState({
+        key: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        value: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        country: {value: null, matchMode: FilterMatchMode.CONTAINS},
+        language: {value: null, matchMode: FilterMatchMode.CONTAINS},
     });
 
-    const onEditButtonClick = () => {
-        onEditBtnClick(selectedRows[0]);
-    }
+    const onSelectionChange = (e) => {
+        setSelectedTranslations(e.value);
+    };
 
-    const onActionEditButtonClick = (idx) => {
-        onEditBtnClick(data.entries[idx]);
-    }
-
-    const onDeleteButtonClick = () => {
-        onDeleteBtnClick(selectedRows);
-    }
-
-    const onSelect = (selectedRows) => {
-        setSelectedRows(selectedRows);
-        onSelectionChange(selectedRows)
-    }
+    const countryBodyTemplate = (translation) => {
+        return (
+            <span>
+                <span className={`fi fi-${translation.country.toLowerCase()}`}></span>
+                <span className="">{`${translation.country}`}</span>
+            </span>
+        )
+    };
 
     const onFilterChange = (filter) => {
-        onChange(filter);
+        props.onChange(filter);
     }
 
     return (
-        <BaseTable
-            id={'translationTable'}
-            data={data.entries}
-            onAddButtonClick={onAddBtnClick}
-            onEditButtonClick={onEditButtonClick}
-            onDeleteButtonClick={onDeleteButtonClick}
-            onImportButtonClick={onImportBtnClick}
-            onExportButtonClick={onExportBtnClick}
-            onActionEditButtonClick={onActionEditButtonClick}
-            onHelpButtonClick={onHelpBtnClick}
-            onSelect={onSelect}
-            onFilterChange={onFilterChange}
-            pagination={data.pagination}
-            onPaginationChange={onPaginationChange}
-        >
-            <BaseColumn
-                title='Id'
-                dataIndex={'id'}
-                fieldType='id'
-                show={false}
-            />
-            <BaseColumn
-                show={true}
-                title='Key'
-                dataIndex={'key'}
-                fieldType='string'
-                enableFilter={true}
-                width={30}
-            />
-            <BaseColumn
-                show={true}
-                title='Value'
-                dataIndex={'value'}
-                fieldType='string'
-                width={30}
-                enableFilter={true}
-            />
-            <BaseColumn
-                show={matches}
-                title='Country'
-                dataIndex={'country'}
-                fieldType='country'
-                width={10}
-                enableFilter={true}
-                filterData={locales}
-            />
-            <BaseColumn
-                show={matches}
-                title='Language'
-                dataIndex={'language'}
-                fieldType='language'
-                width={10}
-                enableFilter={true}
-                filterData={locales}
-            />
-        </BaseTable>
+        <DataTable
+            paginator
+            lazy
+            rows={translationsFilter.rows}
+            first={translationsFilter.page * translationsFilter.rows}
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            value={translations}
+            onSelectionChange={onSelectionChange}
+            filters={filters}
+            onFilter={onFilterChange}
+            filterDisplay="row"
+            globalFilterFields={['key']}
+            totalRecords={translationsFilter.total}
+            selectionMode="multiple"
+            selection={selectedTranslations}
+            onPage={onFilterChange}
+            tableStyle={{minWidth: '50rem'}}
+            dataKey="id">
+                <Column selectionMode="multiple" headerStyle={{width: '3rem'}}></Column>
+                <Column field="key" header="Key" filter filterPlaceholder="Search by Key" style={{minWidth: '12rem'}}/>
+                <Column field="value" header="Value" filter filterPlaceholder="Search by Value" style={{minWidth: '12rem'}}/>
+                <Column body={countryBodyTemplate} field="country" header="Country" filter filterPlaceholder="Search by key" style={{minWidth: '12rem'}}/>
+                <Column field="language" header="Language" filter filterPlaceholder="Search by key" style={{minWidth: '12rem'}}/>
+        </DataTable>
     );
 }
 

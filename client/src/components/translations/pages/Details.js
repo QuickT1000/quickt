@@ -1,53 +1,71 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Edit from "../forms/Edit";
 import {useNavigate, useParams} from "react-router-dom";
-import {TranslationsContext} from "../Translations";
 import {
     createTranslations,
     destroyTranslations,
     readTranslations,
     updateTranslations
 } from "../../../services/TranslationsService";
-import {paginationDefaults} from "../../../base/pagination/defaults/pagination.defaults";
-import {danger, success} from "../../../base/toast/DwToastHelper";
 import DeleteModal from "../modals/Delete";
 import RenameModal from "../modals/Rename";
+import './Details.scss';
+import {Toast} from "primereact/toast";
+import {useGlobalStore} from "../../../store/global";
+import {useTranslationsStore} from "../../../store/translations";
 
 const Details = () => {
-    const [data, setData] = useState({
-        entries: [], pagination: paginationDefaults
-    });
-    const state = useContext(TranslationsContext);
+
+    const {
+        combinedTranslations,
+        setCombinedTranslations,
+        selectedTranslations
+    } = useTranslationsStore();
+
+    const {
+        selectedProject,
+    } = useGlobalStore();
+
+    const toast = useRef(null);
+    const [data, setData] = useState([]);
     const [showDelete, setShowDelete] = useState(false);
     const [showRename, setShowRename] = useState(false);
     const [entriesToDelete, setEntriesToDelete] = useState([]);
     const [oldKey, setOldKey] = useState('');
     const [newKey, setNewKey] = useState('');
     const navigate = useNavigate();
-    let {key, project} = useParams();
+    const {key, projectId} = useParams();
     const isNewKey = key === 'new';
     const title = isNewKey ? 'New Translations' : 'Edit Translations';
 
     useEffect(() => {
-        if (project !== '' && state.selectedProject.projectId !== '') {
-            navigate(`/translations/details/${state.selectedProject.projectId}/${key}`);
+        console.log("Params changed:", key);
+    }, [key]);
+
+    useEffect(() => {
+        if (selectedProject && selectedProject.projectId !== '') {
             fetchTranslations();
         }
-    }, [state.selectedProject, project]);
+    }, [selectedProject, key]);
 
     const fetchTranslations = async () => {
         try {
-            const pagination = {pageSize: 1000, pageIndex: 1};
-            const projectId = project;
-            const response = await readTranslations({projectId, key, pagination});
-            setData(getCombinedData(response.entries));
+            const response = await readTranslations({
+                filters: {
+                    key: { value: key, matchMode: 'equals'},
+                },
+                projectId: selectedProject?.projectId,
+                page: 0,
+                rows: 1000
+            });
+            setCombinedTranslations(getCombinedData(response.entries));
         } catch (error) {
-            danger(error);
+            toast.current.show({ severity: 'danger', summary: 'Error', detail: JSON.stringify(error) });
         }
     };
 
     const getCombinedData = (entries) =>
-        state.selectedProject.locales.map(locale => {
+        selectedProject.locales.map(locale => {
             const [language, country] = [locale.slice(0, 2), locale.slice(3, 5)];
             return entries.find(entry => entry.country === country && entry.language === language) ||
                 {key: 'new', value: '', country, language};
@@ -55,38 +73,35 @@ const Details = () => {
 
     const onUpdate = async (entries) => {
         try {
-            const projectId = project;
             await updateTranslations({projectId, entries});
-            success('Key updated');
+            toast.current.show({ severity: 'success', summary: 'Info', detail: 'Key updated' });
         } catch (error) {
-            danger(error);
+            toast.current.show({ severity: 'danger', summary: 'Error', detail: JSON.stringify(error) });
         }
     };
 
     const onCreate = async (entries) => {
         try {
-            const projectId = project;
             await createTranslations({projectId, entries});
-            success('Key created');
+            toast.current.show({ severity: 'success', summary: 'Info', detail: 'Key created' });
         } catch (error) {
-            danger(error);
+            toast.current.show({ severity: 'danger', summary: 'Error', detail: JSON.stringify(error) });
         }
     };
 
     const onDelete = async (entries) => {
         try {
-            const projectId = project;
             await destroyTranslations({projectId, entries});
             setShowDelete(false);
-            navigate(`/translations`);
-            success('Key deleted');
+            navigate(`/${selectedProject.projectId}/translations`);
+            toast.current.show({ severity: 'success', summary: 'Info', detail: 'Key deleted' });
         } catch (error) {
-            danger(error);
+            toast.current.show({ severity: 'danger', summary: 'Error', detail: JSON.stringify(error) });
         }
     };
 
     const onRename = async (newKey) => {
-        const entriesToRename = data.filter(entry => typeof entry.id !== 'undefined');
+        const entriesToRename = combinedTranslations.filter(entry => typeof entry.id !== 'undefined');
 
         const newEntries = entriesToRename.map(rec => {
             return {
@@ -96,11 +111,12 @@ const Details = () => {
         });
 
         await onUpdate(newEntries);
+        toast.current.show({ severity: 'success', summary: 'Info', detail: 'Key renamed' });
         const combinedNewEntries = getCombinedData(newEntries);
 
         setData(combinedNewEntries);
         setShowRename(false);
-        navigate(`/translations/details/${project}/${newKey}`);
+        navigate(`/${selectedProject.projectId}/translations/details/${newKey}`);
     }
 
     const onDeleteBtnClick = (entries) => {
@@ -119,20 +135,26 @@ const Details = () => {
         setShowDelete(false);
     }
 
+    const onCancel = () => {
+        navigate(`/${selectedProject.projectId}/translations`);
+    }
+
     return (
-        <div className="m-2">
+        <div className="translations-details-page">
             <Edit
                 title={title}
                 data={data}
                 onCreate={onCreate}
                 onUpdate={onUpdate}
                 onDelete={onDelete}
+                onCancel={onCancel}
                 onDeleteBtnClick={onDeleteBtnClick}
                 onRenameBtnClick={onRenameBtnClick}
             />
             <DeleteModal show={showDelete} onClose={onClose}
                          onDelete={onDelete.bind(null, entriesToDelete)}></DeleteModal>
             <RenameModal oldKey={oldKey} show={showRename} onClose={onClose} onSave={onRename}></RenameModal>
+            <Toast ref={toast} />
         </div>
     );
 };

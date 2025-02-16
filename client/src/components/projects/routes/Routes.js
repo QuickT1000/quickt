@@ -3,7 +3,7 @@ import { Route, Routes as ReactRoutes } from "react-router-dom";
 import Overview from "../pages/Overview";
 import Details from "../pages/Details";
 
-const Routes = () => {
+const ProjectRoutes = () => {
     const overview = <Overview />;
     const details = <Details />;
     return (
@@ -14,4 +14,4 @@ const Routes = () => {
     );
 };
 
-export default Routes;
+export default ProjectRoutes;

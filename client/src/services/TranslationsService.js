@@ -1,5 +1,3 @@
-import {paginationDefaults} from "../base/pagination/defaults/pagination.defaults";
-
 export async function updateTranslations({projectId, entries}) {
     const response = await fetch('/api/translations/v1/update', {
         method: 'post',
@@ -31,21 +29,12 @@ export async function destroyTranslations({projectId, entries}) {
 }
 
 export async function readTranslations(props) {
-    const {
-        projectName = '',
-        projectId = '',
-        key = '',
-        value = '',
-        country = '',
-        language = '',
-        pagination = paginationDefaults
-    } = props;
+    const response = await fetch('/api/translations/v1/read', {
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(props)
+    });
 
-    let url = `/api/translations/v1/read?key=${key}&value=${value}&country=${country}&language=${language}&projectName=${projectName}&projectId=${projectId}`;
-    if (pagination) {
-        url += `&pageIndex=${pagination.pageIndex}&pageSize=${pagination.pageSize}`
-    }
-    const response = await fetch(url);
     return await response.json();
 }
 

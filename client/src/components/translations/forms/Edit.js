@@ -1,64 +1,64 @@
-import React, { useEffect, useImperativeHandle, useRef} from 'react';
-import {useNavigate, useParams, useLocation} from "react-router-dom";
-import {useForm, useFieldArray} from "react-hook-form";
-import {InputGroup} from "react-bootstrap";
-import {FaCheck} from "react-icons/fa6";
-import Form from 'react-bootstrap/Form';
-import {success} from "../../../base/toast/DwToastHelper";
-import BaseButtons from "../../../base/buttons/BaseButtons";
-import BaseCard from "../../../base/card/BaseCard";
+import React, {useEffect, useRef} from 'react';
+import {useNavigate, useParams, useLocation} from 'react-router-dom';
+import {useForm, useFieldArray} from 'react-hook-form';
+import {InputText} from 'primereact/inputtext';
+import {Button} from 'primereact/button';
+import {Card} from 'primereact/card';
+import {FaCheck} from 'react-icons/fa6';
+import {Toast} from "primereact/toast";
+import {useTranslationsStore} from "../../../store/translations";
 
 const Edit = (props) => {
+    const toast = useRef(null);
     const localFormRef = useRef();
-    const {data, title, onUpdate, onDelete, onCreate, onDeleteBtnClick, onRenameBtnClick} = props;
-    const {key, project} = useParams();
+    const {title, onUpdate, onDelete, onCreate, onCancel, onDeleteBtnClick, onRenameBtnClick} = props;
+    const {key, projectId} = useParams();
     const location = useLocation();
     const navigate = useNavigate();
-    const isNewEntry = key === 'new';
-    const projectId = project;
+    let isNewEntry = key === 'new';
+
+    const {
+        combinedTranslations,
+        setCombinedTranslations,
+    } = useTranslationsStore();
 
     const {
         register,
         control,
         handleSubmit,
         watch,
-        setValue,
         reset,
         formState: {isDirty, dirtyFields}
     } = useForm({
         defaultValues: {
             key: isNewEntry ? '' : key,
-            translations: []  // Start with empty array
+            translations: [] // Start with empty array
         }
     });
 
-    const {fields, replace} = useFieldArray({
+    const {fields} = useFieldArray({
         control,
-        name: "translations"
+        name: 'translations'
     });
 
-    // Update form when data becomes available
     useEffect(() => {
-        if (data && data.length > 0) {
-            const formattedTranslations = data.map(item => {
-                return ({
-                    id: item.id,
-                    translation_id: item.id,
-                    language: item.language,
-                    country: item.country,
-                    value: item.value || '',
-                    originalValue: item.value || ''
-                });
-            });
+        if (combinedTranslations && combinedTranslations.length > 0) {
+            const formattedTranslations = combinedTranslations.map(item => ({
+                id: item.id,
+                translation_id: item.id,
+                language: item.language,
+                country: item.country,
+                value: item.value || '',
+                originalValue: item.value || ''
+            }));
 
             reset({
                 key: isNewEntry ? '' : key,
                 translations: formattedTranslations
             });
         }
-    }, [data]);
+    }, [combinedTranslations, isNewEntry, key, reset]);
 
-    // Handle highlighted translation based on URL params
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
         const locale = searchParams.get('locale');
@@ -74,14 +74,14 @@ const Edit = (props) => {
         }
     }, [location.search, fields]);
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (formData) => {
         const updates = {
             create: [],
             update: [],
             delete: []
         };
 
-        data.translations.forEach((translation) => {
+        formData.translations.forEach((translation) => {
             const isValueChanged = translation.value !== translation.originalValue;
             const isEmptyValue = !translation.value;
             const isNewValue = !translation.originalValue && translation.value;
@@ -89,7 +89,7 @@ const Edit = (props) => {
             if (isValueChanged) {
                 const translationData = {
                     id: translation.id,
-                    key: data.key,
+                    key: formData.key,
                     country: translation.country,
                     language: translation.language,
                     value: translation.value
@@ -99,6 +99,7 @@ const Edit = (props) => {
                     updates.delete.push(translationData);
                 } else if (isNewValue) {
                     updates.create.push(translationData);
+
                 } else {
                     updates.update.push(translationData);
                 }
@@ -110,40 +111,31 @@ const Edit = (props) => {
             if (updates.update.length) await onUpdate(updates.update);
             if (updates.create.length) await onCreate(updates.create);
 
-            success('Changes saved');
+            toast.current.show({ severity: 'success', summary: 'Info', detail: 'Changes saved' });
 
             if (isNewEntry) {
-                navigate(`/translations/details/${projectId}/${data.key}`);
+                navigate(`/${projectId}/translations/details/${formData.key}`);
             }
         } catch (error) {
             console.error('Error updating translations:', error);
-            // Here you could add error toast notification
         }
-    };
-
-    const onCancel = () => {
-        navigate(`/translations`);
     };
 
     const handleDelete = async () => {
         const currentKey = watch('key');
+        const translationsToDelete = fields.filter(field => typeof field.translation_id !== 'undefined');
 
-        const translationsToDelete = fields.filter(field => (typeof field.translation_id !== 'undefined'));
-
-        const responseToDelete = translationsToDelete.map(rec => {
-            return ({
-                id: rec.translation_id,
-                key: currentKey,
-                country: rec.country,
-                language: rec.language
-            });
-        });
+        const responseToDelete = translationsToDelete.map(rec => ({
+            id: rec.translation_id,
+            key: currentKey,
+            country: rec.country,
+            language: rec.language
+        }));
 
         try {
             await onDeleteBtnClick(responseToDelete);
         } catch (error) {
             console.error('Error deleting translations:', error);
-            // Here you could add error toast notification
         }
     };
 
@@ -151,84 +143,76 @@ const Edit = (props) => {
         onRenameBtnClick(key);
     };
 
-    if (!data || data.length === 0) {
+    if (!combinedTranslations || combinedTranslations.length === 0) {
         return <div>Loading translations...</div>;
     }
 
+    const cardFooter = (
+        <div className='edit-form__buttons'>
+            <Button label="Save" type="submit" disabled={!isDirty}/>
+            <Button label="Cancel" className="p-button-secondary" onClick={onCancel}/>
+        </div>
+    );
+
     return (
-        <BaseCard
-            onCancel={onCancel}
-            onSave={handleSubmit(onSubmit)}
-            disabled={!isDirty}
-            title={title}
-        >
-            <Form ref={localFormRef} className='translations-details-form'>
-                {/* Key Section */}
-                <Form.Label>Key</Form.Label>
-                <div className="d-flex flex-wrap">
-                    <div className='flex-grow-1'>
-                        <Form.Group className="mb-2">
-                            <Form.Control
-                                size='sm'
-                                className="form-control key"
-                                {...register('key')}
-                                readOnly={!isNewEntry}
-                            />
-                        </Form.Group>
+        <form ref={localFormRef} onSubmit={handleSubmit(onSubmit)} className="p-fluid">
+            <Card title={title} footer={cardFooter} className={'edit-form'}>
+                <label htmlFor="key">Key</label>
+
+                <div className="edit-form__header">
+                    <div className="p-field edit-form__header__key-input">
+                        <InputText
+                            id="key"
+                            {...register('key')}
+                            disabled={!isNewEntry}
+                        />
                     </div>
 
                     {!isNewEntry && (
-                        <div className=''>
-                            <Form.Group className="mb-2 mx-1">
-                                <BaseButtons button='delete' onClick={handleDelete}/>
-                                <BaseButtons
-                                    button='rename'
-                                    onClick={handleRename}
-                                />
-                            </Form.Group>
+                        <div className="edit-form__buttons">
+                            <Button label="Delete" className="p-button-danger" onClick={handleDelete}/>
+                            <Button label="Rename" onClick={handleRename}/>
                         </div>
                     )}
                 </div>
 
-                {/* Translations Section */}
-                <Form.Label>Translations:</Form.Label>
-                {fields.map((field, index) => (
-                    <Form.Group key={field.id} id={`translation-${index}`}>
 
-                        <InputGroup
-                            className={`mb-3 ${
-                                location.search.includes(`${field.language}-${field.country}`)
-                                    ? 'highlighted-group'
-                                    : ''
-                            }`}
-                            size='sm'
-                        >
-                        <span className="input-group-text input-prefix">
-                            <span className={`fi fi-${field.country.toLowerCase()}`}/>
-                            <span className="locale mx-1">
-                                {`${field.language}-${field.country}`}
-                            </span>
-                        </span>
-                            <Form.Control
-                                type="text"
-                                {...register(`translations.${index}.value`)}
-                            />
-                            <Form.Control
-                                hidden={true}
-                                name="translation_id"
-                                defaultValue={data[index]?.id}
+                <div className="edit-form__translations">
+                    <label>Translations:</label>
+                    {fields.map((field, index) => (
+                        <div key={field.id} id={`translation-${index}`} className="p-mb-3">
+                            <div className="p-inputgroup edit-form__input-group">
 
-                            />
-                            {dirtyFields.translations?.[index]?.value && (
-                                <span className="input-group-text">
-                                <FaCheck color="green"/>
-                            </span>
-                            )}
-                        </InputGroup>
-                    </Form.Group>
-                ))}
-            </Form>
-        </BaseCard>
+                                <span className="p-inputgroup-addon edit-form__flags">
+                                    <span className={`fi fi-${field.country.toLowerCase()}`}></span>
+                                    <span
+                                        className="edit-form__flags__locales">{`${field.language}-${field.country}`}</span>
+                                </span>
+
+                                <InputText
+                                    {...register(`translations.${index}.value`)}
+                                    placeholder="Enter translation"
+                                />
+
+                                <input
+                                    type="hidden"
+                                    name={`translations.${index}.translation_id`}
+                                    defaultValue={combinedTranslations[index]?.id}
+                                />
+                                {dirtyFields.translations?.[index]?.value && (
+                                    <span className="p-inputgroup-addon">
+                                        <FaCheck color="green"/>
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+            </Card>
+            <Toast ref={toast} />
+        </form>
+
     );
 };
 

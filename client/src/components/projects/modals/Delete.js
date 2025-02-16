@@ -1,24 +1,29 @@
-import React, {useContext, useState} from 'react';
-import {Modal } from "react-bootstrap";
-import DwButtons from "../../../base/buttons/BaseButtons";
+import React, {useState} from 'react';
 import DeleteForm from "../forms/Delete";
+import {Button} from "primereact/button";
+import {Dialog} from "primereact/dialog";
 
 const DeleteModal = (props) => {
     const [deleteButtonActive, setDeleteButtonActive] = useState(true);
 
     return (
-        <Modal show={props.show} onHide={props.onClose}>
-            <Modal.Header closeButton>
-                <Modal.Title>Delete Project</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <DeleteForm setDeleteButtonActive={setDeleteButtonActive}/>
-            </Modal.Body>
-            <Modal.Footer>
-                <DwButtons button='delete' onClick={props.onDelete} disabled={deleteButtonActive}/>
-                <DwButtons button='cancel' onClick={props.onClose}/>
-            </Modal.Footer>
-        </Modal>
+        <Dialog
+            header="Delete Project"
+            visible={props.show}
+            position={'top'}
+            style={{width: '50vw'}}
+            onHide={props.onClose}
+            footer={
+                <>
+                    <Button label="Delete" className="p-button-danger" onClick={props.onDelete}
+                            disabled={deleteButtonActive}/>
+                    <Button label="Cancel" onClick={props.onClose}/>
+                </>
+            }
+            draggable={false}
+            resizable={false}>
+            <DeleteForm setDeleteButtonActive={setDeleteButtonActive}/>
+        </Dialog>
     );
 }
 

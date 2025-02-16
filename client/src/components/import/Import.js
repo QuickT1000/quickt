@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import { FaFileImport } from "react-icons/fa6";
+import React, {useState, useEffect, useRef} from 'react';
 import { importTranslations } from "../../services/TranslationsService";
-import { danger, success, info } from "../../base/toast/DwToastHelper";
 import {flattenJSON, parseCSV} from "./Utils";
-import BaseButtons from "../../base/buttons/BaseButtons";
-import { flatten } from 'flat';
+import {Dialog} from "primereact/dialog";
+import {Button} from "primereact/button";
+import {Toast} from "primereact/toast";
 
 function Import(props) {
     const [file, setFile] = useState(null);
-
+    const toast = useRef(null);
     const handleClose = () => props.onClose(false);
 
     useEffect(() => {
@@ -23,13 +21,13 @@ function Import(props) {
         if (selectedFile && (selectedFile.type === "application/json" || selectedFile.type === "text/csv")) {
             setFile(selectedFile);
         } else {
-            info("Bitte eine CSV- oder JSON-Datei hochladen.");
+            toast.current.show({ severity: 'info', summary: 'Info', detail: 'Bitte eine CSV- oder JSON-Datei hochladen.' });
         }
     };
 
     const handleUpload = async () => {
         if (!file) {
-            info("Bitte eine Datei auswählen.");
+            toast.current.show({ severity: 'info', summary: 'Info', detail: 'Bitte eine Datei auswählen.' });
             return;
         }
 
@@ -47,7 +45,7 @@ function Import(props) {
                 try {
                     const response = await importTranslations(props.projectId, data, {}); // Leeres Objekt für Länder und Sprachen
                     if (response.success) {
-                        success("Import erfolgreich abgeschlossen!");
+                        toast.current.show({ severity: 'success', summary: 'Info', detail: 'import successfull' });
                         props.onSuccess(); // Rufe die Aktualisierungsfunktion auf
                         handleClose(); // Schließe das Modal
                     } else {
@@ -55,10 +53,10 @@ function Import(props) {
                     }
                 } catch (error) {
                     console.error("Fehler beim API-Aufruf:", error);
-                    danger("Ein Fehler ist beim API-Aufruf aufgetreten.");
+                    toast.current.show({ severity: 'danger', summary: 'Info', detail: 'api error' });
                 }
             } catch (error) {
-                danger("Fehler beim Verarbeiten der Datei.");
+                toast.current.show({ severity: 'danger', summary: 'Info', detail: 'file error' });
                 console.error("Dateifehler:", error);
             }
         };
@@ -67,32 +65,29 @@ function Import(props) {
     };
 
     return (
-        <>
-            <Modal show={props.show} onHide={handleClose}>
-                <Modal.Header closeButton>
-                    <Modal.Title><FaFileImport />&nbsp;Import</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <div>Import (json, csv): </div>
-                    <input
-                        type="file"
-                        accept=".csv,.json"
-                        onChange={handleFileChange}
-                        style={{ marginTop: '10px' }}
-                    />
-                </Modal.Body>
-                <Modal.Footer>
-                    <BaseButtons
-                        button='cancel'
-                        onClick={handleClose}
-                    />
-                    <BaseButtons
-                        button='import'
-                        onClick={handleUpload}
-                    />
-                </Modal.Footer>
-            </Modal>
-        </>
+        <Dialog
+            header="Import"
+            visible={props.show}
+            position={'top'}
+            style={{width: '50vw'}}
+            onHide={handleClose}
+            footer={
+                <>
+                    <Button label="Import" className="p-button-danger" onClick={handleUpload}/>
+                    <Button label="Cancel" onClick={handleClose}/>
+                </>
+            }
+            draggable={false}
+            resizable={false}>
+            <div>Import (json, csv):</div>
+            <input
+                type="file"
+                accept=".csv,.json"
+                onChange={handleFileChange}
+                style={{marginTop: '10px'}}
+            />
+            <Toast ref={toast} />
+        </Dialog>
     );
 }
 
